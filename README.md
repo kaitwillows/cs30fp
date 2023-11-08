@@ -1,7 +1,5 @@
-# cs20fp
+# cs30fp
 
 ## big ideas  
 video game
-- is cool
-- lotta mechanics
-- and like, problem solving
+- pixel art??
