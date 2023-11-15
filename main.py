@@ -1,3 +1,5 @@
+# btw this is all copy/pasted from the pygame docs its not plagerism!!
+
 # Example file showing a circle moving on screen
 import pygame
 
