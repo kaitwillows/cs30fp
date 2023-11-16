@@ -2,6 +2,14 @@
 
 ## abstract (theme)
 
+### roughly drafting
+- enter the gungeon inspired (esp with the controls)
+- rouglike energy (the procedural generation might be difficult (chat gpt integration????? for stories?????))
+- 2d open world
+
+- gotta have a story but idk what it will be yet
+
+
 
 ## client
 - ????????
