@@ -4,12 +4,9 @@
 A 2d "Enter the Gungeon" inspired rougelike with a heavier emphasis on story.
 
 
-
-
 ## client
-- Maverick Ma
+- Maverick
     - artwork, story and setting
-    - (like im trying to see his vision through, the same way a producer would work with an artist(??????????????????????))
 
 
 
@@ -22,7 +19,7 @@ A 2d "Enter the Gungeon" inspired rougelike with a heavier emphasis on story.
 ## environment (ide)
 - vs code
     - plugin integrations for vim and git
-    - locally ran; better proformance
+    - locally ran; better performance
     - my personal choice
 
 ## skills
@@ -31,4 +28,5 @@ A 2d "Enter the Gungeon" inspired rougelike with a heavier emphasis on story.
 - files
     - The option to save the game state, or load the save state from a file will be provided. This will require a system that allows class objects and their properties to be written to a file, as well as allowing class objects to be initialized from a file.
 
-- gui 
+- gui
+    - necissary for the game to run, provided by pygame
