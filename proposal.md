@@ -1,31 +1,29 @@
 # CSE Project D (30)
 
 ## abstract (theme)
+A 2d "Enter the Gungeon" inspired rougelike with a heavier emphasis on story.
 
-### roughly drafting
-- enter the gungeon inspired (esp with the controls)
-- rouglike energy (the procedural generation might be difficult (chat gpt integration????? for stories?????))
-- 2d open world
 
-- gotta have a story but idk what it will be yet
-
-distilled as follows
-- 2d open world / open map
-- pixel art??? and chiptune music?????
-- 
 
 
 ## client
-- ????????
+- Maverick Ma
+    - artwork, story and setting
+    - (like im trying to see his vision through, the same way a producer would work with an artist(??????????????????????))
+
 
 
 ## language and libraries 
 - python
+    - simplicity and readability of syntax
 - pygame
-    - incl music
+    - gui will allow for external artwork, including sprites, music, etc
 
 ## environment (ide)
-- 
+- vs code
+    - plugin integrations for vim and git
+    - locally ran; better proformance
+    - my personal choice
 
 ## skills
 - classes and objects
