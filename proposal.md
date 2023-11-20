@@ -1,7 +1,7 @@
 # CSE Project D (30)
 
 ## abstract (theme)
-A 2d "Enter the Gungeon" inspired rougelike with a heavier emphasis on story.
+A 2d "Enter the Gungeon" inspired video game with a heavier emphasis on story.
 
 
 ## client
