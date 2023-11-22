@@ -3,22 +3,28 @@
 # Example file showing a circle moving on screen
 import pygame
 
+from util import Coordinates
+from game_objects import Player
+
 # pygame setup
 pygame.init()
-screenRes = (1280, 720)
-screen = pygame.display.set_mode(screenRes)
+screen_res = (1280, 720)
+screen = pygame.display.set_mode(screen_res)
 
 clock = pygame.time.Clock()
 running = True
 dt = 0
-
 camera = (0, 0)
 
+mouse_screen_offset = Coordinates(pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
 
-character = pygame.image.load('./assets/ralsei.png')
-# character = pygame.transform.scale(image, (image.get_width() * 2, image.get_height() * 2))
+# pygame.event.set_grab(True)
+# disabling this until its really needed
 
-pygame.event.set_grab(True)
+# create player object aaaa
+playerCords = Coordinates(screen_res[0]/2, screen_res[1])
+player = Player(playerCords)
+
 
 while running:
     # poll for events
@@ -27,17 +33,13 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
+    mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
+    mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
+
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
 
-    # charX = screenRes[0]*.2 - pygame.mouse.get_pos()[0]*.1
-    # charY = screenRes[1]*.2 - pygame.mouse.get_pos()[1]*.1
-    charX = screenRes[0]/2 - (pygame.mouse.get_pos()[0] - screenRes[0]/2)*.5
-    charY = screenRes[1]/2 - (pygame.mouse.get_pos()[1] - screenRes[1]/2)*.5
-    print(f"x: {charX}, y: {charY}")
-    
-    charPos = (charX, charY) 
-    screen.blit(character, charPos)
+    player.draw()
 
     '''
     keys = pygame.key.get_pressed()
