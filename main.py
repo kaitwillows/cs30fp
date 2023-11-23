@@ -4,7 +4,7 @@
 import pygame
 
 from util import Coordinates
-from game_objects import Player
+from game_objects import Player, Map
 
 # pygame setup
 pygame.init()
@@ -22,8 +22,9 @@ mouse_screen_offset = Coordinates(pygame.mouse.get_pos()[0] - screen_res[0]/2*-.
 # disabling this until its really needed
 
 # create player object aaaa
-playerCords = Coordinates(screen_res[0]/2, screen_res[1])
+playerCords = Coordinates(screen_res[0]/2, screen_res[1]/2)
 player = Player(playerCords)
+map = Map(playerCords)
 
 
 while running:
@@ -39,6 +40,7 @@ while running:
     # fill the screen with a color to wipe away anything from last frame
     screen.fill("white")
 
+    map.draw()
     player.draw()
 
     '''
