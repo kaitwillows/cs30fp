@@ -33,8 +33,9 @@ these are mostly for just design and whatnot
 - 2 frame walking animation for player?
 
 
-
-
+# also
+i really need to get working on the artwork and music and dialogue and all that stuff.  
+will probably put about an hour per day at home to get it done???
 
 
 
