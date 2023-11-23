@@ -26,6 +26,12 @@ these are mostly for just design and whatnot
 
 
 
+### 11/23 more goals
+- collision between player sprite and map walls
+- player can also move freely around the map
+- sprite tiles for ground
+- 2 frame walking animation for player?
+
 
 
 
