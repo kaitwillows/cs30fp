@@ -1,14 +1,7 @@
 # cs30fp
 
-what
-- proposal pres nov 16
-- due ~dec 15th 
+so as you can tell, this currently is not finished
 
+and yes, i probably should used unity, however, unity did not want to work with me, and as such, i am stuck here, with a library i uncertainly label a game engine. i build the camera, movement, collision and rendering from scratch, and all for what, a game i may never complete? a project that may never live up to my expectations?
 
-## proposal
-[main page](./proposal.md)
-
-## daily logs
-[11/08](./log/11.08.md)  
-[11/15](./log/11.15.md)  
-[11/16](./log/11.16.md)  
+only in time, only in time. for this is 20 days

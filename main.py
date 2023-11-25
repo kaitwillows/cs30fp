@@ -1,4 +1,4 @@
-# btw this is all copy/pasted from the pygame docs its not plagerism!!
+# this is what i like to call making a game when you don't know how
 
 # Example file showing a circle moving on screen
 import pygame
@@ -17,6 +17,7 @@ dt = 0
 camera = (0, 0)
 
 mouse_screen_offset = Coordinates(pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
+world_offset = Coordinates(0, 0)
 
 # pygame.event.set_grab(True)
 # disabling this until its really needed
@@ -26,10 +27,12 @@ playerCords = Coordinates(screen_res[0]/2, screen_res[1]/2)
 player = Player(playerCords)
 map = Map(playerCords)
 
+player_speed = (300*dt)
 
 while running:
-    # poll for events
-    # pygame.QUIT event means the user clicked X to close your window
+
+    start_time = pygame.time.get_ticks()
+
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
@@ -37,30 +40,27 @@ while running:
     mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
     mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
 
-    # fill the screen with a color to wipe away anything from last frame
+    keys = pygame.key.get_pressed()
+    if keys[pygame.K_w]:
+        world_offset += Coordinates(0, 300 * dt)
+    if keys[pygame.K_s]:
+        world_offset += Coordinates(0, -300 * dt)
+    if keys[pygame.K_a]:
+        world_offset += Coordinates(300 * dt, 0)
+    if keys[pygame.K_d]:
+        world_offset += Coordinates(-300 * dt, 0)
+
     screen.fill("white")
 
     map.draw()
     player.draw()
 
-    '''
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_w]:
-        player_pos.y -= 300 * dt
-    if keys[pygame.K_s]:
-        player_pos.y += 300 * dt
-    if keys[pygame.K_a]:
-        player_pos.x -= 300 * dt
-    if keys[pygame.K_d]:
-        player_pos.x += 300 * dt
-    '''
 
-    # flip() the display to put your work on screen
     pygame.display.flip()
 
-    # limits FPS to 60
-    # dt is delta time in seconds since last frame, used for framerate-
-    # independent physics.
+    # basically just count to 60^-1 cos why not
     dt = clock.tick(60) / 1000
+
+
 
 pygame.quit()

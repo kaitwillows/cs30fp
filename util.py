@@ -13,3 +13,6 @@ class Coordinates:
 
     def as_tuple(self):
         return self.x, self.y
+
+def collision():
+    pass

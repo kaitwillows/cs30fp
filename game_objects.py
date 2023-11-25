@@ -29,8 +29,8 @@ class Map:
             [1, 1, 1, 1, 1],
         ]
     def draw(self):
-        from main import mouse_screen_offset, screen
-        position = self.initial_position + mouse_screen_offset
+        from main import mouse_screen_offset, screen, world_offset
+        position = self.initial_position + mouse_screen_offset + world_offset
         tile_size = 200 # find a better place to define this constant
         for i, row in enumerate(self.tile_map):
             for j, tile in enumerate(row):
