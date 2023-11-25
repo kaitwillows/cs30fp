@@ -39,6 +39,8 @@ will probably put about an hour per day at home to get it done???
 
 
 
-
+### 11/25
+i just learned about surfaces so we really need that
+- 
 
 

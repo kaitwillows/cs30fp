@@ -39,6 +39,9 @@ while running:
 
     mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
     mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
+    
+    # for collision check later
+    old_player_cords = player.coordinates
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
@@ -49,6 +52,8 @@ while running:
         world_offset += Coordinates(300 * dt, 0)
     if keys[pygame.K_d]:
         world_offset += Coordinates(-300 * dt, 0)
+
+
 
     screen.fill("white")
 
