@@ -56,9 +56,10 @@ while running:
 
 
 
-    screen.fill("white")
+    screen.fill("grey")
 
-    screen.blit(map_surface, (mouse_screen_offset + world_offset).as_tuple)
+    #print((mouse_screen_offset + world_offset).as_tuple[0])
+    screen.blit(map_surface, (mouse_screen_offset + world_offset).as_tuple())
     player.draw()
 
 
