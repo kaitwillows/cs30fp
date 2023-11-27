@@ -28,15 +28,14 @@ class Map:
             [1, 0, 0, 0, 1],
             [1, 1, 1, 1, 1],
         ]
-    def draw(self):
-        from main import mouse_screen_offset, screen, world_offset
-        position = self.initial_position + mouse_screen_offset + world_offset
+    def draw(self) -> pygame.Surface:
         tile_size = 200 # find a better place to define this constant
+        map_surface = pygame.Surface(tile_size * 5, tile_size * 5)
         for i, row in enumerate(self.tile_map):
             for j, tile in enumerate(row):
-                x = (j * tile_size) + position.as_tuple()[0]
-                y = (i * tile_size) + position.as_tuple()[1]
+                x = j * tile_size
+                y = i * tile_size
                 if tile == 1:
-                    pygame.draw.rect(screen, (0, 0, 0), (x, y, tile_size, tile_size))
+                    pygame.draw.rect(map_surface, (0, 0, 0), (x, y, tile_size, tile_size))
                 else:
-                    pygame.draw.rect(screen, (255, 255, 255), (x, y, tile_size, tile_size))
+                    pygame.draw.rect(map_surface, (255, 255, 255), (x, y, tile_size, tile_size))

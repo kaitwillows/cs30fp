@@ -26,6 +26,7 @@ world_offset = Coordinates(0, 0)
 playerCords = Coordinates(screen_res[0]/2, screen_res[1]/2)
 player = Player(playerCords)
 map = Map(playerCords)
+map_surface = map.draw()
 
 player_speed = (300*dt)
 
@@ -57,7 +58,7 @@ while running:
 
     screen.fill("white")
 
-    map.draw()
+    screen.blit(map_surface, (mouse_screen_offset + world_offset).as_tuple)
     player.draw()
 
 
