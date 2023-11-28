@@ -27,6 +27,7 @@ playerCords = Coordinates(screen_res[0]/2, screen_res[1]/2)
 player = Player(playerCords)
 map = Map(playerCords)
 map_surface = map.draw()
+map_mask = pygame.mask.from_surface(map_surface)
 
 player_speed = (300*dt)
 
@@ -55,11 +56,13 @@ while running:
         world_offset += Coordinates(-300 * dt, 0)
 
 
+    if map_mask.get_at((pygame.mouse.get_pos())):
+        print("OMG")
 
     screen.fill("grey")
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
-    screen.blit(map_surface, (mouse_screen_offset + world_offset).as_tuple())
+    screen.blit(map_surface, (0, 0))
     player.draw()
 
 
