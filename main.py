@@ -23,7 +23,7 @@ camera_cordinates = Coordinates(0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
-player = Player(Coordinates(0, 0))
+player = Player(Coordinates(255, 255))
 map = Map() # does this really need to be an object
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
@@ -41,9 +41,10 @@ while running:
     mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
     mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
 
-    camera_cordinates.x = player.coordinates.x - screen_res[0]/2
-    camera_cordinates.y = player.coordinates.y - screen_res[1]/2
+    camera_cordinates.x = (player.coordinates.x - screen_res[0]/2)*-1
+    camera_cordinates.y = (player.coordinates.y - screen_res[1]/2)*-1
 
+    total_offset = mouse_screen_offset + camera_cordinates
 
     
     # for collision check later
@@ -66,8 +67,8 @@ while running:
     screen.fill("grey")
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
-    screen.blit(map_surface, camera_cordinates.as_tuple())
-    player.draw(Coordinates(screen_res[0]/2, screen_res[1]/2))
+    screen.blit(map_surface, total_offset.as_tuple())
+    player.draw(Coordinates(screen_res[0]/2, screen_res[1]/2) + mouse_screen_offset)
 
 
     pygame.display.flip()
