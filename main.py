@@ -41,8 +41,7 @@ while running:
 
     mouse_screen_offset = (-1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5), (-1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5) # why
 
-    camera_cordinates[0] = (player.coordinates.x - screen_res[0]/2)*-1
-    camera_cordinates[1] = (player.coordinates.y - screen_res[1]/2)*-1
+    camera_cordinates = ((player.coordinates[0] - screen_res[0]/2)*-1, (player.coordinates[1] - screen_res[1]/2)*-1)
 
     total_offset = mouse_screen_offset + camera_cordinates
 
@@ -61,14 +60,15 @@ while running:
         player.coordinates = add_coordinates(player.coordinates, (300 * dt, 0)) 
 
 
-    if map_mask.get_at(player.coordinates.as_tuple()):
-        player.coordinates = old_player_cords
+    if map_mask.get_at(player.coordinates):
+        # player.coordinates = old_player_cords
+        pass
 
     screen.fill("grey")
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
-    screen.blit(map_surface, total_offset.as_tuple())
-    player.draw(add_coordinates(screen_res[0]/2, screen_res[1]/2), mouse_screen_offset)
+    screen.blit(map_surface, total_offset)
+    player.draw(add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
 
 
     pygame.display.flip()
