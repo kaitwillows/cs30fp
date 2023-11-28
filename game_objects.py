@@ -15,7 +15,7 @@ class Player:
         self.sprite = pygame.image.load('./assets/ralsei.png')
     def draw(self, coordinates: Coordinates):
         from main import mouse_screen_offset, screen
-        screen.blit(self.sprite, coordinates)
+        screen.blit(self.sprite, coordinates.as_tuple())
 
 
 class Map:

@@ -17,13 +17,13 @@ dt = 0
 camera = (0, 0)
 
 mouse_screen_offset = Coordinates(pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
-world_offset = Coordinates(0, 0)
+camera_cordinates = Coordinates(0, 0)
 
 # pygame.event.set_grab(True)
 # disabling this until its really needed
 
 # create player object aaaa
-player = Player(0, 0)
+player = Player(Coordinates(0, 0))
 map = Map() # does this really need to be an object
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
@@ -40,29 +40,34 @@ while running:
 
     mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
     mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
+
+    camera_cordinates.x = player.coordinates.x - screen_res[0]/2
+    camera_cordinates.y = player.coordinates.y - screen_res[1]/2
+
+
     
     # for collision check later
     old_player_cords = player.coordinates
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        player.coordinates += Coordinates(0, 300 * dt)
+        player.coordinates += Coordinates(0, -300 * dt)
     if keys[pygame.K_s]:
-        player.coordinate += Coordinates(0, -300 * dt)
+        player.coordinates += Coordinates(0, 300 * dt)
     if keys[pygame.K_a]:
-        player.coordinate += Coordinates(300 * dt, 0)
+        player.coordinates += Coordinates(-300 * dt, 0)
     if keys[pygame.K_d]:
-        player.coordinate += Coordinates(-300 * dt, 0)
+        player.coordinates += Coordinates(300 * dt, 0)
 
 
-    if map_mask.get_at((pygame.mouse.get_pos())):
-        print("OMG")
+    if map_mask.get_at(player.coordinates.as_tuple()):
+        player.coordinates = old_player_cords
 
     screen.fill("grey")
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
-    screen.blit(map_surface, (0, 0))
-    player.draw(player.coordinates)
+    screen.blit(map_surface, camera_cordinates.as_tuple())
+    player.draw(Coordinates(screen_res[0]/2, screen_res[1]/2))
 
 
     pygame.display.flip()
