@@ -43,7 +43,9 @@ while running:
 
     camera_cordinates = ((player.coordinates[0] - screen_res[0]/2)*-1, (player.coordinates[1] - screen_res[1]/2)*-1)
 
-    total_offset = mouse_screen_offset + camera_cordinates
+    total_offset = add_coordinates(mouse_screen_offset, camera_cordinates)
+
+    print(total_offset)
 
     
     # for collision check later
@@ -59,10 +61,11 @@ while running:
     if keys[pygame.K_d]:
         player.coordinates = add_coordinates(player.coordinates, (300 * dt, 0)) 
 
+        print(player.coordinates)
+
 
     if map_mask.get_at(player.coordinates):
-        # player.coordinates = old_player_cords
-        pass
+        player.coordinates = old_player_cords
 
     screen.fill("grey")
 
