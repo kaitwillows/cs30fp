@@ -3,8 +3,9 @@
 # Example file showing a circle moving on screen
 import pygame
 
-from util import Coordinates
+# from util import Coordinates
 from game_objects import Player, Map
+from util import add_coordinates
 
 # pygame setup
 pygame.init()
@@ -16,14 +17,14 @@ running = True
 dt = 0
 camera = (0, 0)
 
-mouse_screen_offset = Coordinates(pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
-camera_cordinates = Coordinates(0, 0)
+mouse_screen_offset = (pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
+camera_cordinates = (0, 0)
 
 # pygame.event.set_grab(True)
 # disabling this until its really needed
 
 # create player object aaaa
-player = Player(Coordinates(255, 255))
+player = Player((255, 255))
 map = Map() # does this really need to be an object
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
@@ -38,11 +39,11 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    mouse_screen_offset.x = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
-    mouse_screen_offset.y = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
+    mouse_screen_offset[0] = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
+    mouse_screen_offset[1] = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
 
-    camera_cordinates.x = (player.coordinates.x - screen_res[0]/2)*-1
-    camera_cordinates.y = (player.coordinates.y - screen_res[1]/2)*-1
+    camera_cordinates[0] = (player.coordinates.x - screen_res[0]/2)*-1
+    camera_cordinates[1] = (player.coordinates.y - screen_res[1]/2)*-1
 
     total_offset = mouse_screen_offset + camera_cordinates
 
@@ -52,13 +53,13 @@ while running:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        player.coordinates += Coordinates(0, -300 * dt)
+        player.coordinates = add_coordinates(player.coordinates, (0, -300 * dt))
     if keys[pygame.K_s]:
-        player.coordinates += Coordinates(0, 300 * dt)
+        player.coordinates = add_coordinates(player.coordinates, (0, 300 * dt))
     if keys[pygame.K_a]:
-        player.coordinates += Coordinates(-300 * dt, 0)
+        player.coordinates = add_coordinates(player.coordinates, (-300 * dt, 0))
     if keys[pygame.K_d]:
-        player.coordinates += Coordinates(300 * dt, 0)
+        player.coordinates = add_coordinates(player.coordinates, (300 * dt, 0)) 
 
 
     if map_mask.get_at(player.coordinates.as_tuple()):
@@ -68,7 +69,7 @@ while running:
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, total_offset.as_tuple())
-    player.draw(Coordinates(screen_res[0]/2, screen_res[1]/2) + mouse_screen_offset)
+    player.draw(add_coordinates(screen_res[0]/2, screen_res[1]/2), mouse_screen_offset)
 
 
     pygame.display.flip()

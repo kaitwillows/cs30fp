@@ -1,5 +1,5 @@
 import pygame
-from util import Coordinates
+from util import add_coordinates
 
 
 '''
@@ -10,12 +10,12 @@ class GameObjects:
 
 # unity did not work in my favour so im just gonna make all this from scratch aaaaa but i also have a cart after this so idk how thats gonna go for me aaaaaaa
 class Player:
-    def __init__(self, coordinates: Coordinates):
+    def __init__(self, coordinates):
         self.coordinates = coordinates
         self.sprite = pygame.image.load('./assets/ralsei.png')
-    def draw(self, coordinates: Coordinates):
+    def draw(self, coordinates):
         from main import mouse_screen_offset, screen
-        screen.blit(self.sprite, coordinates.as_tuple())
+        screen.blit(self.sprite, coordinates)
 
 
 class Map:
