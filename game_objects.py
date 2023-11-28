@@ -13,14 +13,13 @@ class Player:
     def __init__(self, coordinates: Coordinates):
         self.coordinates = coordinates
         self.sprite = pygame.image.load('./assets/ralsei.png')
-    def draw(self):
+    def draw(self, coordinates: Coordinates):
         from main import mouse_screen_offset, screen
-        screen.blit(self.sprite, (self.coordinates + mouse_screen_offset).as_tuple())
+        screen.blit(self.sprite, coordinates)
 
 
 class Map:
-    def __init__(self, initial_position: Coordinates):
-        self.initial_position = initial_position
+    def __init__(self):
         self.tile_map = [
             [1, 1, 1, 1, 1],
             [1, 0, 0, 0, 1],

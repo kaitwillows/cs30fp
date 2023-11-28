@@ -23,9 +23,8 @@ world_offset = Coordinates(0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
-playerCords = Coordinates(screen_res[0]/2, screen_res[1]/2)
-player = Player(playerCords)
-map = Map(playerCords)
+player = Player(0, 0)
+map = Map() # does this really need to be an object
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
 
@@ -47,13 +46,13 @@ while running:
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        world_offset += Coordinates(0, 300 * dt)
+        player.coordinates += Coordinates(0, 300 * dt)
     if keys[pygame.K_s]:
-        world_offset += Coordinates(0, -300 * dt)
+        player.coordinate += Coordinates(0, -300 * dt)
     if keys[pygame.K_a]:
-        world_offset += Coordinates(300 * dt, 0)
+        player.coordinate += Coordinates(300 * dt, 0)
     if keys[pygame.K_d]:
-        world_offset += Coordinates(-300 * dt, 0)
+        player.coordinate += Coordinates(-300 * dt, 0)
 
 
     if map_mask.get_at((pygame.mouse.get_pos())):
@@ -63,7 +62,7 @@ while running:
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, (0, 0))
-    player.draw()
+    player.draw(player.coordinates)
 
 
     pygame.display.flip()
