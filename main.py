@@ -39,8 +39,7 @@ while running:
         if event.type == pygame.QUIT:
             running = False
 
-    mouse_screen_offset[0] = -1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5 
-    mouse_screen_offset[1] = -1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5
+    mouse_screen_offset = (-1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5), (-1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5)
 
     camera_cordinates[0] = (player.coordinates.x - screen_res[0]/2)*-1
     camera_cordinates[1] = (player.coordinates.y - screen_res[1]/2)*-1
