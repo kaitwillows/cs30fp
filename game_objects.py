@@ -21,7 +21,7 @@ class Player:
 class Map:
     def __init__(self):
         self.tile_map = [
-            [1, 1, 1, 1, 1],
+            [1, 1, 0, 1, 1],
             [1, 0, 0, 0, 1],
             [1, 0, 1, 0, 1],
             [1, 0, 0, 0, 1],

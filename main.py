@@ -24,10 +24,14 @@ camera_cordinates = (0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
-player = Player((255, 255))
+player = pygame.image.load("./assets/ralsei.png")
+player_coordinates = (255, 255)
+player_hitbox = 
 map = Map() # does this really need to be an object
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
+crosshair = pygame.image.load("./assets/crosshair.png")
+pygame.mouse.set_visible(False)
 
 player_speed = (300*dt)
 
@@ -41,7 +45,7 @@ while running:
 
     mouse_screen_offset = (-1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5), (-1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5) # why
 
-    camera_cordinates = ((player.coordinates[0] - screen_res[0]/2)*-1, (player.coordinates[1] - screen_res[1]/2)*-1)
+    camera_cordinates = ((player_coordinates[0] - screen_res[0]/2)*-1, (player_coordinates[1] - screen_res[1]/2)*-1)
 
     total_offset = add_coordinates(mouse_screen_offset, camera_cordinates)
 
@@ -49,35 +53,50 @@ while running:
 
     
     # for collision check later
-    old_player_cords = player.coordinates
+    old_player_cords = player_coordinates
 
     keys = pygame.key.get_pressed()
     if keys[pygame.K_w]:
-        player.coordinates = add_coordinates(player.coordinates, (0, -300 * dt))
+        player_coordinates = add_coordinates(player_coordinates, (0, -300 * dt))
     if keys[pygame.K_s]:
-        player.coordinates = add_coordinates(player.coordinates, (0, 300 * dt))
+        player_coordinates = add_coordinates(player_coordinates, (0, 300 * dt))
+
+    try:
+        if map_mask.get_at(player_coordinates):
+            player_coordinates = old_player_cords
+    except:
+        pass
+
+
+    old_player_cords = player_coordinates
+
     if keys[pygame.K_a]:
-        player.coordinates = add_coordinates(player.coordinates, (-300 * dt, 0))
+        player_coordinates = add_coordinates(player_coordinates, (-300 * dt, 0))
     if keys[pygame.K_d]:
-        player.coordinates = add_coordinates(player.coordinates, (300 * dt, 0)) 
+        player_coordinates = add_coordinates(player_coordinates, (300 * dt, 0)) 
 
-        print(player.coordinates)
+    try:
+        if map_mask.get_at(player_coordinates):
+            player_coordinates = old_player_cords
+    except:
+        pass
 
 
-    if map_mask.get_at(player.coordinates):
-        player.coordinates = old_player_cords
+
 
     screen.fill("grey")
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, total_offset)
-    player.draw(add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
+    screen.blit(player, add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
+    screen.blit(crosshair, add_coordinates(pygame.mouse.get_pos(), (-16, -16)))
 
 
     pygame.display.flip()
 
-    # basically just count to 60^-1 cos why not
-    dt = clock.tick(60) / 1000
+    # 120 make smooth
+    dt = clock.tick(120) / 1000
+
 
 
 
