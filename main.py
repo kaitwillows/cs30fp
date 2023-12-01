@@ -4,7 +4,7 @@
 import pygame
 
 # from util import Coordinates
-from game_objects import Player, Map
+from game_objects import Map
 from util import add_coordinates
 
 # pygame setup
@@ -24,10 +24,9 @@ camera_cordinates = (0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
-player = pygame.image.load("./assets/ralsei.png")
+player = pygame.image.load("./assets/ralsei.png") # 23 x 43 pixels
 player_coordinates = (255, 255)
-player_hitbox = 
-map = Map() # does this really need to be an object
+map = Map() # does this really need to be an object? yes!
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
 crosshair = pygame.image.load("./assets/crosshair.png")

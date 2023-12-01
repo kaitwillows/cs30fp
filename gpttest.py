@@ -4,70 +4,46 @@ import os
 # Initialize Pygame
 pygame.init()
 
-# Constants
-WIDTH, HEIGHT = 800, 600
-WHITE = (255, 255, 255)
-RED = (255, 0, 0)
-
-# Create the display surface
-screen = pygame.display.set_mode((WIDTH, HEIGHT))
-pygame.display.set_caption("Map with Collision Detection")
+# Set up display
+width, height = 400, 400
+screen = pygame.display.set_mode((width, height))
+clock = pygame.time.Clock()
 
 # Load images
-current_directory = os.path.dirname(__file__)
-image_path = os.path.join(current_directory, 'assets')  # Replace 'images' with your folder name
-background_image = pygame.image.load(os.path.join(image_path, 'background.png')).convert()
-player_image = pygame.image.load(os.path.join(image_path, 'ralsei.png')).convert_alpha()
+rect_image = pygame.Surface((50, 50))
+rect_image.fill((255, 0, 0))  # Red rectangle
 
-# Define player properties
-player_rect = player_image.get_rect()
-player_rect.center = (WIDTH // 2, HEIGHT // 2)
-player_mask = pygame.mask.from_surface(player_image)
+# Create a rectangle
+rect = rect_image.get_rect()
+rect.center = (width // 2, height // 2)
 
-# Game loop
+# Create a mask for the rectangle
+rect_mask = pygame.mask.from_surface(rect_image)
+
+# Create a mask for the obstacle (replace this with your obstacle)
+obstacle_mask = pygame.mask.from_surface(pygame.Surface((50, 50)))
+obstacle_mask.fill()
+
 running = True
 while running:
-    screen.fill(WHITE)
-    screen.blit(background_image, (0, 0))
+    screen.fill((255, 255, 255))
 
+    # Event handling
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
 
-    # Move the player (example movement)
-    keys = pygame.key.get_pressed()
-    if keys[pygame.K_LEFT]:
-        player_rect.x -= 5
-    if keys[pygame.K_RIGHT]:
-        player_rect.x += 5
-    if keys[pygame.K_UP]:
-        player_rect.y -= 5
-    if keys[pygame.K_DOWN]:
-        player_rect.y += 5
+    # Update rectangle position (for example, move it to the right)
+    rect.x += 1
 
-    # Collision detection
-    player_mask_offset = (player_rect.x, player_rect.y)
-    overlap = background_image.get_rect().colliderect(player_rect)
+    # Check for collision between rectangle and obstacle mask
+    if rect_mask.overlap(obstacle_mask, (obstacle_mask.get_rect().x - rect.x, obstacle_mask.get_rect().y - rect.y)):
+        print("Collision detected!")
 
-    if overlap:
-        # Get the mask of the overlapping area between player and background
-        overlap_mask = pygame.mask.from_surface(background_image, pygame.mask.from_threshold(background_image, RED, (1, 1, 1, 255)))
-
-        # Offset the player mask to the overlapping area
-        player_mask_offset = (player_rect.x - overlap_mask.get_bounding_rects()[0].x,
-                              player_rect.y - overlap_mask.get_bounding_rects()[0].y)
-
-        # Check for collision between player mask and background mask
-        if overlap_mask.overlap(player_mask, player_mask_offset):
-            # Collision occurred, handle accordingly (in this example, stopping movement)
-            player_rect.x += 5 if keys[pygame.K_LEFT] else 0
-            player_rect.x -= 5 if keys[pygame.K_RIGHT] else 0
-            player_rect.y += 5 if keys[pygame.K_UP] else 0
-            player_rect.y -= 5 if keys[pygame.K_DOWN] else 0
-
-    # Draw player
-    screen.blit(player_image, player_rect)
+    # Draw the rectangle
+    screen.blit(rect_image, rect)
 
     pygame.display.flip()
+    clock.tick(60)
 
 pygame.quit()
