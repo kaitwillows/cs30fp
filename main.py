@@ -1,4 +1,5 @@
 # this is what i like to call making a game when you don't know how
+# i am so bad at this
 
 # Example file showing a circle moving on screen
 import pygame
