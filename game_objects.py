@@ -21,15 +21,13 @@ class Player:
 class Map:
     def __init__(self):
         self.tile_map = [
-            [1, 1, 0, 1, 1],
-            [1, 0, 0, 0, 1],
-            [1, 0, 1, 0, 1],
-            [1, 0, 0, 0, 1],
-            [1, 1, 1, 1, 1],
+            # 0 and 1s tilemap
         ]
+
+
     def draw(self) -> pygame.Surface:
         tile_size = 50 # find a better place to define this constant
-        map_surface = pygame.Surface((tile_size * 5, tile_size * 5))
+        map_surface = pygame.Surface((tile_size * 100, tile_size * 100))
         map_surface.set_colorkey((255, 255, 255))
         map_surface.fill((255, 255, 255))
         for i, row in enumerate(self.tile_map):
