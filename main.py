@@ -10,7 +10,7 @@ from util import add_coordinates
 
 # pygame setup
 pygame.init()
-screen_res = (1280, 720)
+screen_res = [1280, 720]
 screen = pygame.display.set_mode(screen_res)
 
 clock = pygame.time.Clock()
@@ -25,6 +25,7 @@ camera_cordinates = (0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
+player
 player = pygame.image.load("./assets/ralsei.png") # 23 x 43 pixels
 player_coordinates = (255, 255)
 map = Map() # does this really need to be an object? yes!
