@@ -25,8 +25,10 @@ camera_cordinates = (0, 0)
 # disabling this until its really needed
 
 # create player object aaaa
-player
-player = pygame.image.load("./assets/ralsei.png") # 23 x 43 pixels
+
+player_image = pygame.image.load("./assets/ralsei.png") # 23 x 43 pixels
+# player_hitbox = pygame.Rect(0, 0, 23, 43)
+hitbox = pygame.mask.from_surface(pygame.Surface((23, 43)))
 player_coordinates = (255, 255)
 map = Map() # does this really need to be an object? yes!
 map_surface = map.draw()
@@ -63,7 +65,7 @@ while running:
         player_coordinates = add_coordinates(player_coordinates, (0, 300 * dt))
 
     try:
-        if map_mask.get_at(player_coordinates):
+        if map_mask.overlap(hitbox, player_coordinates):
             player_coordinates = old_player_cords
     except:
         pass
@@ -76,8 +78,9 @@ while running:
     if keys[pygame.K_d]:
         player_coordinates = add_coordinates(player_coordinates, (300 * dt, 0)) 
 
+
     try:
-        if map_mask.get_at(player_coordinates):
+        if map_mask.overlap(hitbox, player_coordinates):
             player_coordinates = old_player_cords
     except:
         pass
@@ -89,7 +92,7 @@ while running:
 
     #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, total_offset)
-    screen.blit(player, add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
+    screen.blit(player_image, add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
     screen.blit(crosshair, add_coordinates(pygame.mouse.get_pos(), (-16, -16)))
 
 
