@@ -5,8 +5,9 @@
 import pygame
 
 # from util import Coordinates
-from game_objects import Map
+from game_objects import Map, Bullet
 from util import add_coordinates
+
 
 # pygame setup
 pygame.init()
@@ -29,8 +30,8 @@ camera_cordinates = (0, 0)
 player_image = pygame.image.load("./assets/ralsei.png") # 23 x 43 pixels
 # player_hitbox = pygame.Rect(0, 0, 23, 43)
 hitbox = pygame.mask.from_surface(pygame.Surface((23, 43)))
-player_coordinates = (255, 255)
-map = Map() # does this really need to be an object? yes!
+player_coordinates = (0, 0)
+map = Map("./assets/map1.png") # does this really need to be an object? yes!
 map_surface = map.draw()
 map_mask = pygame.mask.from_surface(map_surface)
 crosshair = pygame.image.load("./assets/crosshair.png")
@@ -38,13 +39,28 @@ pygame.mouse.set_visible(False)
 
 player_speed = (300*dt)
 
+left_mouse_down = False
+
+fire_rate = .3
+time_since_last_fire = 0.0
+bullets = []
+bullet_sprite = pygame.image.load("./assets/ralsei.png")
+
 while running:
 
-    start_time = pygame.time.get_ticks()
 
     for event in pygame.event.get():
         if event.type == pygame.QUIT:
             running = False
+        if event.type == pygame.MOUSEBUTTONDOWN: # girl
+            if event.button == 1: # left mouse click
+                left_mouse_down = True
+        if event.type == pygame.MOUSEBUTTONUP:
+            if event.button == 1:
+                left_mouse_down = False
+                left_mouse_up = True
+            else:
+                left_mouse_up = False 
 
     mouse_screen_offset = (-1 * (pygame.mouse.get_pos()[0] - screen_res[0]/2)*.5), (-1 * (pygame.mouse.get_pos()[1] - screen_res[1]/2)*.5) # why
 
@@ -52,7 +68,15 @@ while running:
 
     total_offset = add_coordinates(mouse_screen_offset, camera_cordinates)
 
-    print(total_offset)
+    # print(total_offset)
+    
+    if left_mouse_down:
+        time_since_last_fire += dt
+
+        if time_since_last_fire >= fire_rate:
+            # like i have a math final after this and i did not study (only because i was working till 10 but still)
+            bullets.append(Bullet(0, 0, 1, 1))
+            time_since_last_fire = 0.0
 
     
     # for collision check later
@@ -90,11 +114,17 @@ while running:
 
     screen.fill("grey")
 
+
+    
+
     #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, total_offset)
     screen.blit(player_image, add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
     screen.blit(crosshair, add_coordinates(pygame.mouse.get_pos(), (-16, -16)))
 
+    for bullet in bullets:
+        bullet.move()
+        screen.blit(bullet_sprite, (bullet.x, bullet.y))
 
     pygame.display.flip()
 

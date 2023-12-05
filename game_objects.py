@@ -1,5 +1,6 @@
 import pygame
 from util import add_coordinates
+from util import TILE_SIZE
 
 
 '''
@@ -19,25 +20,39 @@ class Player:
 
 
 class Map:
-    def __init__(self):
-        self.tile_map = [ 
-            [1] * 3 + [0] * 44 + [1] * 3,
-            
-        ]
-
+    def __init__(self, image_path):
+        self.image = pygame.image.load(image_path)
+        self.width = self.image.get_width()
+        self.height = self.image.get_height()
 
 
     def draw(self) -> pygame.Surface:
-        tile_size = 50
-        map_surface = pygame.Surface((tile_size * 50, tile_size * 50))
+        map_surface = pygame.Surface((self.width * TILE_SIZE, self.height * TILE_SIZE))
         map_surface.set_colorkey((255, 255, 255))
         map_surface.fill((255, 255, 255))
-        for i, row in enumerate(self.tile_map):
-            for j, tile in enumerate(row):
-                x = j * tile_size
-                y = i * tile_size
-                if tile == 1:
-                    pygame.draw.rect(map_surface, (0, 0, 0), (x, y, tile_size, tile_size))
+        for y in range(self.height):
+            for x in range(self.width):
+                pixel_color = self.image.get_at((x, y))
+                if pixel_color == (0, 0, 0, 255):
+                    pygame.draw.rect(map_surface, (0, 0, 0), (x * TILE_SIZE, y * TILE_SIZE, TILE_SIZE, TILE_SIZE))
         return map_surface
+
+
+class Bullet: # if i didn't regret my life decisions at this point, i soon will
+    BULLET_PATH = "./assets/bullet.png" # i mean its like kind of a constant
+    # where should the image path be defined?
+    # how do i even do the mouse????????? pythagorus???????????????????????
+    # nvm bois i got this
+    def __init__(self, x, y, x_velocity, y_velocity):
+        self.x = x
+        self.y = y
+        self.x_velocity = x_velocity 
+        self.y_velocity = y_velocity # i guess thats it
+    def move(self): # we'll do test point for removal (hhhhh)
+        self.x += self.x_velocity
+        self.y += self.y_velocity
+
+
+        
 
 

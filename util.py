@@ -14,6 +14,7 @@
 #     def as_tuple(self):
 #         return self.x, self.y
 
+TILE_SIZE = 50
 
 def add_coordinates(coord1: tuple[float, float], coord2: tuple[float, float]) -> tuple[float, float]:
     x1, y1 = coord1
