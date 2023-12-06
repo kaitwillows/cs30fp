@@ -6,7 +6,7 @@ import pygame
 
 # from util import Coordinates
 from game_objects import Map, Bullet
-from util import add_coordinates
+from util import add_coordinates, multiply_coordinates
 
 
 # pygame setup
@@ -40,11 +40,12 @@ pygame.mouse.set_visible(False)
 player_speed = (300*dt)
 
 left_mouse_down = False
+left_mouse_up = False 
 
 fire_rate = .3
 time_since_last_fire = 0.0
 bullets = []
-bullet_sprite = pygame.image.load("./assets/ralsei.png")
+bullet_sprite = pygame.image.load("./assets/bullet.png")
 
 while running:
 
@@ -70,12 +71,21 @@ while running:
 
     # print(total_offset)
     
+    time_since_last_fire += dt
     if left_mouse_down:
-        time_since_last_fire += dt
-
         if time_since_last_fire >= fire_rate:
             # like i have a math final after this and i did not study (only because i was working till 10 but still)
-            bullets.append(Bullet(0, 0, 1, 1))
+            print(pygame.mouse.get_pos())
+            bullet_velocity = multiply_coordinates(add_coordinates(pygame.mouse.get_pos(), (multiply_coordinates(screen_res, (-.5, -.5)))), (.05, .05)) # just trust me on this bro (literally dont trust me on this)
+            # now you may be trying to read the above line, thinking: "how is it even possible to code something this terribly?" and ill be honest i wish i knew
+
+            # im so sorry
+            magnitude = math.sqrt(x**2 + y**2)
+            
+
+
+            print(bullet_velocity)
+            bullets.append(Bullet(player_coordinates, (bullet_velocity)))
             time_since_last_fire = 0.0
 
     
@@ -124,7 +134,7 @@ while running:
 
     for bullet in bullets:
         bullet.move()
-        screen.blit(bullet_sprite, (bullet.x, bullet.y))
+        screen.blit(bullet_sprite, add_coordinates(bullet.position, total_offset))
 
     pygame.display.flip()
 

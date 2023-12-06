@@ -23,6 +23,12 @@ def add_coordinates(coord1: tuple[float, float], coord2: tuple[float, float]) ->
     new_y = y1 + y2
     return new_x, new_y
 
+def multiply_coordinates(coord1: tuple[float, float], coord2: tuple[float, float]) -> tuple[float, float]:
+    x1, y1 = coord1
+    x2, y2 = coord2
+    new_x = x1 * x2
+    new_y = y1 * y2
+    return new_x, new_y
 
 
 def collision():

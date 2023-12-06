@@ -43,14 +43,11 @@ class Bullet: # if i didn't regret my life decisions at this point, i soon will
     # where should the image path be defined?
     # how do i even do the mouse????????? pythagorus???????????????????????
     # nvm bois i got this
-    def __init__(self, x, y, x_velocity, y_velocity):
-        self.x = x
-        self.y = y
-        self.x_velocity = x_velocity 
-        self.y_velocity = y_velocity # i guess thats it
+    def __init__(self, position: tuple, velocity: tuple):
+        self.position = position
+        self.velocity = velocity
     def move(self): # we'll do test point for removal (hhhhh)
-        self.x += self.x_velocity
-        self.y += self.y_velocity
+        self.position = add_coordinates(self.position, self.velocity)
 
 
         
