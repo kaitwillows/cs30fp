@@ -73,6 +73,7 @@ while running:
 
     # print(total_offset)
     
+    # watch me get proactively blacklisted from every cs related job after the hiring agencies read the following block of code (also cant spell)
     time_since_last_fire += dt
     if left_mouse_down:
         if time_since_last_fire >= fire_rate:
