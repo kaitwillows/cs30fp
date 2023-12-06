@@ -77,25 +77,25 @@ while running:
     if left_mouse_down:
         if time_since_last_fire >= fire_rate:
             # like i have a math final after this and i did not study (only because i was working till 10 but still)
-            print(pygame.mouse.get_pos())
 
             raw_crosshair_coordinates = add_coordinates(pygame.mouse.get_pos(), (multiply_coordinates(screen_res, (-.5, -.5))))
-            print(raw_crosshair_coordinates)
             # im so sorry
             magnitude = math.sqrt(raw_crosshair_coordinates[0]**2 + raw_crosshair_coordinates[1]**2) # i am coding this like an ape
 
             normalized_x = raw_crosshair_coordinates[0] / magnitude
             normalized_y = raw_crosshair_coordinates[1] / magnitude
 
-            velocity_ratio = raw_crosshair_coordinates[0] / raw_crosshair_coordinates[1] if raw_crosshair_coordinates[0]!=0 else 1
+            try:
+                velocity_ratio = raw_crosshair_coordinates[0] / raw_crosshair_coordinates[1] if raw_crosshair_coordinates[0]!=0 else 1
+            except: # just please trust me on this (LITERALLY DO NOT TRUST ME ON THIS PLEASE)
+                velocity_ratio = 0
 
             bullet_velocity_y = math.sqrt(1 - normalized_x**2)
             bullet_velocity_x = bullet_velocity_y * math.copysign(1, raw_crosshair_coordinates[0]) * abs(velocity_ratio) if raw_crosshair_coordinates[0] >= 0 else -bullet_velocity_y * velocity_ratio
 
-            bullet_velocity = (bullet_velocity_x, bullet_velocity_y) # i should have just used unity
+            bullet_velocity = multiply_coordinates((normalized_x, normalized_y), (10, 10)) # i should have just used unity
+            # who on earth let me cook
 
-
-            print(bullet_velocity)
             bullets.append(Bullet(player_coordinates, (bullet_velocity)))
             time_since_last_fire = 0.0
 
