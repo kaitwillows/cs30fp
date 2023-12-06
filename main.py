@@ -1,7 +1,9 @@
 # this is what i like to call making a game when you don't know how
 # i am so bad at this
+# why did i do this
 
 # Example file showing a circle moving on screen
+import math
 import pygame
 
 # from util import Coordinates
@@ -76,12 +78,21 @@ while running:
         if time_since_last_fire >= fire_rate:
             # like i have a math final after this and i did not study (only because i was working till 10 but still)
             print(pygame.mouse.get_pos())
-            bullet_velocity = multiply_coordinates(add_coordinates(pygame.mouse.get_pos(), (multiply_coordinates(screen_res, (-.5, -.5)))), (.05, .05)) # just trust me on this bro (literally dont trust me on this)
-            # now you may be trying to read the above line, thinking: "how is it even possible to code something this terribly?" and ill be honest i wish i knew
 
+            raw_crosshair_coordinates = add_coordinates(pygame.mouse.get_pos(), (multiply_coordinates(screen_res, (-.5, -.5))))
+            print(raw_crosshair_coordinates)
             # im so sorry
-            magnitude = math.sqrt(x**2 + y**2)
-            
+            magnitude = math.sqrt(raw_crosshair_coordinates[0]**2 + raw_crosshair_coordinates[1]**2) # i am coding this like an ape
+
+            normalized_x = raw_crosshair_coordinates[0] / magnitude
+            normalized_y = raw_crosshair_coordinates[1] / magnitude
+
+            velocity_ratio = raw_crosshair_coordinates[0] / raw_crosshair_coordinates[1] if raw_crosshair_coordinates[0]!=0 else 1
+
+            bullet_velocity_y = math.sqrt(1 - normalized_x**2)
+            bullet_velocity_x = bullet_velocity_y * math.copysign(1, raw_crosshair_coordinates[0]) * abs(velocity_ratio) if raw_crosshair_coordinates[0] >= 0 else -bullet_velocity_y * velocity_ratio
+
+            bullet_velocity = (bullet_velocity_x, bullet_velocity_y) # i should have just used unity
 
 
             print(bullet_velocity)

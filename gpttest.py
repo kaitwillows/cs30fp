@@ -1,49 +1,31 @@
-import pygame
-import os
+import math
 
-# Initialize Pygame
-pygame.init()
+# Function to normalize coordinates
+def normalize_coordinates(coords):
+    normalized_coords = []
+    for x, y in coords:
+        # Calculate the magnitude of the vector
+        magnitude = math.sqrt(x**2 + y**2)
+        
+        # Normalize coordinates to lie on the unit circle
+        normalized_x = x / magnitude
+        normalized_y = y / magnitude
+        
+        # Preserve the ratio between x and y
+        ratio = y / x if x != 0 else 1  # Avoid division by zero
+        
+        # Adjust normalized coordinates to maintain the ratio
+        adjusted_y = math.sqrt(1 - normalized_x**2)
+        adjusted_x = adjusted_y * math.copysign(1, x) * abs(ratio) if x != 0 else 0
+        
+        normalized_coords.append((adjusted_x, adjusted_y))
+    
+    return normalized_coords
 
-# Set up display
-width, height = 400, 400
-screen = pygame.display.set_mode((width, height))
-clock = pygame.time.Clock()
+# Example coordinates
+coordinates = [(3, 4), (-2, 5), (1, -1), (-3, -4)]
 
-# Load images
-rect_image = pygame.Surface((50, 50))
-rect_image.fill((255, 0, 0))  # Red rectangle
-
-# Create a rectangle
-rect = rect_image.get_rect()
-rect.center = (width // 2, height // 2)
-
-# Create a mask for the rectangle
-rect_mask = pygame.mask.from_surface(rect_image)
-
-# Create a mask for the obstacle (replace this with your obstacle)
-obstacle_mask = pygame.mask.from_surface(pygame.Surface((50, 50)))
-obstacle_mask.fill()
-
-running = True
-while running:
-    screen.fill((255, 255, 255))
-
-    # Event handling
-    for event in pygame.event.get():
-        if event.type == pygame.QUIT:
-            running = False
-
-    # Update rectangle position (for example, move it to the right)
-    rect.x += 1
-
-    # Check for collision between rectangle and obstacle mask
-    if rect_mask.overlap(obstacle_mask, (obstacle_mask.get_rect().x - rect.x, obstacle_mask.get_rect().y - rect.y)):
-        print("Collision detected!")
-
-    # Draw the rectangle
-    screen.blit(rect_image, rect)
-
-    pygame.display.flip()
-    clock.tick(60)
-
-pygame.quit()
+# Normalize coordinates
+normalized_coordinates = normalize_coordinates(coordinates)
+print("Original Coordinates:", coordinates)
+print("Normalized Coordinates:", normalized_coordinates)
