@@ -19,7 +19,6 @@ screen = pygame.display.set_mode(screen_res)
 clock = pygame.time.Clock()
 running = True
 dt = 0
-camera = (0, 0)
 
 mouse_screen_offset = (pygame.mouse.get_pos()[0] - screen_res[0]/2*-.5, pygame.mouse.get_pos()[1] - screen_res[1]/2*-.5)
 camera_cordinates = (0, 0)
