@@ -4,14 +4,11 @@ class Constants:
     SCREEN_RES = (1280, 720)
     BACKGROUND = (255, 255, 255)
 
-class Camera:
-    
-
 class Player:
     SPRITE = pygame.image.load("./assets/ralsei.png")
     SIZE = (23, 43)
     SPEED_STRAIGHT = 300
-    SPEED_DIAGONAL = 212.13
+    SPEED_DIAGONAL = 212.13 
     coordinates = [0, 0]
     hitbox = pygame.mask.from_surface(pygame.Surface((SIZE)))
 
@@ -21,5 +18,6 @@ class Map:
     SCALED_IMAGE = pygame.transform.scale(IMAGE, IMAGE.get_width() * SCALE_FACTOR, IMAGE.get_height() * SCALE_FACTOR)
     MASK = pygame.mask.from_surface(SCALED_IMAGE)
     
-
-
+class Camera: 
+    # mouse_offset # needs mouse pos, updated every frame,
+    # do it like a function or something, decalare the variables here wait
