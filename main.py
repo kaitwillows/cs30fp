@@ -139,7 +139,6 @@ while running:
 
     
 
-    #print((mouse_screen_offset + world_offset).as_tuple[0])
     screen.blit(map_surface, total_offset)
     screen.blit(player_image, add_coordinates((screen_res[0]/2, screen_res[1]/2), mouse_screen_offset))
     screen.blit(crosshair, add_coordinates(pygame.mouse.get_pos(), (-16, -16)))
@@ -150,7 +149,7 @@ while running:
 
     pygame.display.flip()
 
-    # 120 make smooth
+    # setting the clock to 120 as opposed to 60 makes the game smoother
     dt = clock.tick(120) / 1000
 
 
