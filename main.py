@@ -10,7 +10,7 @@ class Screen:
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
     def update(self, drawable_objects):
         Camera.update_camera_position()
-        self.screen.fill("white")
+        self.screen.fill("grey")
         for object in drawable_objects:
             object.draw(self.screen)
         pygame.display.flip()
@@ -54,11 +54,12 @@ class Gun:
         pass # TODO
     
 class Map:
-    RAW_IMAGE = pygame.image.load("./assets/map1.png").convert_alpha()
-    SCALE_FACTOR = 50
-    IMAGE = pygame.Surface((RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), pygame.SRCALPHA)
-    IMAGE = pygame.transform.scale(RAW_IMAGE, (RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), IMAGE)
-    MASK = pygame.mask.from_surface(IMAGE)
+    def __init__(self):
+        self.RAW_IMAGE = pygame.image.load("./assets/map1.png").convert_alpha()
+        self.SCALE_FACTOR = 50
+        self.IMAGE = pygame.Surface((self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR), pygame.SRCALPHA)
+        self.IMAGE = pygame.transform.scale(self.RAW_IMAGE, (self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR), self.IMAGE)
+        self.MASK = pygame.mask.from_surface(self.IMAGE)
     def draw(self, surface: pygame.Surface):
         surface.blit(self.IMAGE, Camera.combined_camera_offset)
 
@@ -68,7 +69,7 @@ class Camera: # this might have a lot of problems with circular importing but we
     combined_camera_offset = [0, 0]
 
     def update_camera_position(): # could be better in reverse order?
-        print(combined_camera_offset)
+        # print(combined_camera_offset)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
