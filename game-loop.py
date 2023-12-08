@@ -6,6 +6,9 @@ player = Player()
 pygame.init()
 SCREEN = pygame.display.set_mode(Constants.SCREEN_RES) # is SCREEN a constant really??
 
+class Inputs:
+    
+
 running = True
 while running:
 
