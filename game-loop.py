@@ -1,13 +1,16 @@
 import pygame
-from main import Constants, Player
+from main import *
 
 player = Player()
 
 pygame.init()
-SCREEN = pygame.display.set_mode(Constants.SCREEN_RES) # is SCREEN a constant really??
+screen = Screen()
 
-class Inputs:
-    
+class Inputs: # ???
+    left_mouse_up = False
+    left_mouse_down = False
+
+
 
 running = True
 while running:
