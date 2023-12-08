@@ -9,6 +9,7 @@ class Screen:
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
     def update(self, drawable_objects):
+        Camera.update_camera_position()
         self.screen.fill("white")
         for object in drawable_objects:
             object.draw(self.screen)
@@ -59,15 +60,17 @@ class Map:
     IMAGE = pygame.transform.scale(RAW_IMAGE, (RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), IMAGE)
     MASK = pygame.mask.from_surface(IMAGE)
     def draw(self, surface: pygame.Surface):
-        pass # TODO
+        surface.blit(self.IMAGE, Camera.combined_camera_offset)
 
 class Camera: # this might have a lot of problems with circular importing but we can deal with that when we get there
     MOUSE_CAMERA_OFFSET_INFLUENCE = 0.5 
     mouse_camera_offset = [0, 0] # for the player (wait)
     combined_camera_offset = [0, 0]
 
-    def update_camera_position(mouse_coordinates: list): # could be better in reverse order?
-        mouse_x, mouse_y = mouse_coordinates
+    def update_camera_position(): # could be better in reverse order?
+        # print("da old mouse is " + combined_camera_offset)
+
+        mouse_x, mouse_y = pygame.mouse.get_pos()
 
         centered_mouse_x = mouse_x - Screen.SCREEN_RESOLUTION[0]/2
         mouse_camera_offset_x = -centered_mouse_x * Camera.MOUSE_CAMERA_OFFSET_INFLUENCE
@@ -77,5 +80,7 @@ class Camera: # this might have a lot of problems with circular importing but we
         mouse_camera_offset_y = -centered_mouse_y * Camera.MOUSE_CAMERA_OFFSET_INFLUENCE
         combined_camera_offset_y = Player.coordinates[1] - Screen.SCREEN_RESOLUTION[1]/2 + mouse_camera_offset_y
 
-        return (mouse_camera_offset_x, mouse_camera_offset_y), (combined_camera_offset_x, combined_camera_offset_y)
+        mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
+        combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]
+        
 
