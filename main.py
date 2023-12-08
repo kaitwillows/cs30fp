@@ -1,20 +1,39 @@
 import pygame
 
+# maybe have a GameObject parent class so that all the updates can be run with a single for loop?
+
 class Screen:
     SCREEN_RESOLUTION = (1280, 720)
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
-        self.screen = pygame.display.set_mode(self.SCREEN_RES) # is SCREEN a constant really??
+        self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
+    def update(self, drawable_objects):
+        self.screen.fill("white")
+        for object in drawable_objects:
+            object.draw(self.screen)
+        pygame.display.flip()
+
+class Mouse: # oh god
+    IMAGE = pygame.image.load("./assets/crosshair.png")
+    SIZE = (IMAGE.get_width(), IMAGE.get_width())
+    DRAW_OFFSET = (SIZE[0]/2, SIZE[1]/2)
+    def draw(self, surface: pygame.Surface):
+        mouse_coordinates = pygame.mouse.get_pos()
+        crosshair_coordinates = (mouse_coordinates[0] - Mouse.DRAW_OFFSET[0], mouse_coordinates[1] - Mouse.DRAW_OFFSET[1])
+        surface.blit(Mouse.IMAGE, crosshair_coordinates)
+
 
 class Player:
     IMAGE = pygame.image.load("./assets/ralsei.png")
-    SIZE = (23, 43) # this could be derived
+    SIZE = (IMAGE.get_width(), IMAGE.get_width())
     SPEED_STRAIGHT = 300
     SPEED_DIAGONAL = 212.13 
     coordinates = [0, 0]
     hitbox = pygame.mask.from_surface(pygame.Surface((SIZE)))
-    def move(self):
+    def move(self, keys):
+        pass # TODO
+    def draw(self, surface: pygame.Surface):
         pass # TODO
 
 class Bullet: # pray to god i'm doing this right
@@ -30,6 +49,8 @@ class Gun:
     FIRE_RATE = .3
     time_since_last_fire = 0.0
     bullets = []
+    def draw(self, surface: pygame.Surface):
+        pass # TODO
     
 class Map:
     RAW_IMAGE = pygame.image.load("./assets/map1.png")
@@ -37,6 +58,8 @@ class Map:
     IMAGE = pygame.Surface((RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR))
     IMAGE = pygame.transform.scale(RAW_IMAGE, (RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), IMAGE)
     MASK = pygame.mask.from_surface(IMAGE)
+    def draw(self, surface: pygame.Surface):
+        pass # TODO
 
 class Camera: # this might have a lot of problems with circular importing but we can deal with that when we get there
     MOUSE_CAMERA_OFFSET_INFLUENCE = 0.5 
