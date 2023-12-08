@@ -1,3 +1,4 @@
 # cs30fp
 
-yo yo yo welcome to the abstraction branch, you know what's going on
+[me rn](https://www.youtube.com/watch?v=GVEih--5Dco)
+
