@@ -54,9 +54,9 @@ class Gun:
         pass # TODO
     
 class Map:
-    RAW_IMAGE = pygame.image.load("./assets/map1.png")
+    RAW_IMAGE = pygame.image.load("./assets/map1.png").convert_alpha()
     SCALE_FACTOR = 50
-    IMAGE = pygame.Surface((RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR))
+    IMAGE = pygame.Surface((RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), pygame.SRCALPHA)
     IMAGE = pygame.transform.scale(RAW_IMAGE, (RAW_IMAGE.get_width() * SCALE_FACTOR, RAW_IMAGE.get_height() * SCALE_FACTOR), IMAGE)
     MASK = pygame.mask.from_surface(IMAGE)
     def draw(self, surface: pygame.Surface):
@@ -68,7 +68,7 @@ class Camera: # this might have a lot of problems with circular importing but we
     combined_camera_offset = [0, 0]
 
     def update_camera_position(): # could be better in reverse order?
-        # print("da old mouse is " + combined_camera_offset)
+        print(combined_camera_offset)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
