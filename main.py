@@ -3,7 +3,7 @@ import pygame
 
 
 class Screen:
-    SCREEN_RESOLUTION = (1920, 1080)
+    SCREEN_RESOLUTION = (500, 500)
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
@@ -39,6 +39,7 @@ class Player:
         self.coordinates = [0, 0]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
     def move(self, walls: pygame.Mask, delta_time):
+        print(self.coordinates)
         from game_loop import Inputs
 
         old_coordinates = self.coordinates
@@ -53,7 +54,7 @@ class Player:
                 self.coordinates[0] += speed * delta_time
             else:
                 self.coordinates[0] -= speed * delta_time
-            if walls.overlap(self.hitbox, self.coordinates):
+            if False:
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
@@ -115,7 +116,6 @@ class Camera: # this might have a lot of problems with circular importing but we
 
     def update_camera_position(self): # could be better in reverse order?
         from game_loop import player
-        # print(combined_camera_offset)
 
         mouse_x, mouse_y = pygame.mouse.get_pos()
 
