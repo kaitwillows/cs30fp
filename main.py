@@ -1,6 +1,6 @@
 import pygame
 
-# maybe have a GameObject parent class so that all the updates can be run with a single for loop?
+
 
 class Screen:
     SCREEN_RESOLUTION = (1920, 1080)
@@ -8,7 +8,11 @@ class Screen:
 
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
-    def update(self, drawable_objects):
+    def move(self, moving_objects: list[object], walls: pygame.mask):
+        for object in moving_objects:
+            object.move(walls) # scared
+
+    def draw(self, drawable_objects):
         from game_loop import camera
         camera.update_camera_position()
         self.screen.fill("grey")
@@ -16,7 +20,7 @@ class Screen:
             object.draw(self.screen)
         pygame.display.flip()
 
-class Mouse: # oh god
+class Mouse:
     IMAGE = pygame.image.load("./assets/crosshair.png")
     SIZE = (IMAGE.get_width(), IMAGE.get_width())
     DRAW_OFFSET = (SIZE[0]/2, SIZE[1]/2)
@@ -34,8 +38,45 @@ class Player:
         self.SPEED_DIAGONAL = 212.13 
         self.coordinates = [0, 0]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
-    def move(self, keys):
-        pass # TODO
+    def move(self, walls: pygame.Mask, delta_time):
+        from game_loop import Inputs
+
+        old_coordinates = self.coordinates
+        horizontal_axis = (Inputs.keys[pygame.K_d] ^ Inputs.keys[pygame.K_a])
+        vertical_axis = (Inputs.keys[pygame.K_w] ^ Inputs.keys[pygame.K_s])
+        if horizontal_axis and vertical_axis:
+            speed = self.SPEED_DIAGONAL
+        else:
+            speed = self.SPEED_STRAIGHT
+        if horizontal_axis:
+            if Inputs.keys[pygame.K_d]:
+                self.coordinates[0] += speed * delta_time
+            else:
+                self.coordinates[0] -= speed * delta_time
+            if walls.overlap(self.hitbox, self.coordinates):
+                self.coordinates = old_coordinates
+            else:
+                old_coordinates = self.coordinates
+        if vertical_axis:
+            if Inputs.keys[pygame.K_w]:
+                self.coordinates[1] += speed * delta_time
+            else:
+                self.coordinates[1] -= speed * delta_time
+            if walls.overlap(self.hitbox, self.coordinates):
+                self.coordinates = old_coordinates
+            else:
+                old_coordinates = self.coordinates
+
+        
+
+        # old_coordinates = self.coordinates
+        # if Inputs.keys[pygame.K_d]: # hardcoded keybinds
+        #     self.coordinates[0] += (self  * delta_time)
+        # if Inputs.keys[pygame.K_a]:
+        #     self.coordinates[0] -=
+
+            
+
     def draw(self, surface: pygame.Surface):
         pass # TODO
 
