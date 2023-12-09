@@ -54,7 +54,7 @@ class Player:
                 self.coordinates[0] += speed * delta_time
             else:
                 self.coordinates[0] -= speed * delta_time
-            if False:
+            if walls.overlap(self.hitbox, self.coordinates):
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
