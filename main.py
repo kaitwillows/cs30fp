@@ -52,7 +52,7 @@ class Player:
                 self.coordinates[0] += speed * delta_time
             else:
                 self.coordinates[0] -= speed * delta_time
-            if walls[0].MASK.overlap(self.hitbox, self.coordinates):
+            if walls[0].MASK.overlap(self.hitbox, self.coordinates): # add in an offset here ffs
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
