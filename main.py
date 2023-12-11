@@ -9,7 +9,7 @@ class Screen:
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
     def move(self, moving_objects: list[object], walls: pygame.mask):
         for object in moving_objects:
-            object.move(walls) # scared
+            object.move(walls) # scared (warrented)
 
     def draw(self, drawable_objects):
         from game_loop import camera
@@ -103,7 +103,6 @@ class Map:
     def draw(self, surface: pygame.Surface):
         from game_loop import camera
         surface.blit(self.IMAGE, camera.combined_camera_offset)
-        print(camera.combined_camera_offset)
 
 class Camera: # this might have a lot of problems with circular importing but we can deal with that when we get there
     def __init__(self):
