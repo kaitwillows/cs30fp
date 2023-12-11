@@ -68,18 +68,13 @@ class Player:
             else:
                 old_coordinates = self.coordinates
 
-        
-
-        # old_coordinates = self.coordinates
-        # if Inputs.keys[pygame.K_d]: # hardcoded keybinds
-        #     self.coordinates[0] += (self  * delta_time)
-        # if Inputs.keys[pygame.K_a]:
-        #     self.coordinates[0] -=
-
-            
-
     def draw(self, surface: pygame.Surface):
-        pass # TODO
+        # i am way too spiritually tired to do this properly, im probably gonna fail
+        from game_loop import camera
+        draw_coordinates_x = self.coordinates[0] + camera.mouse_camera_offset[0]
+        draw_coordinates_y = self.coordinates[1] + camera.mouse_camera_offset[1]
+        draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
+        surface.blit(self.image, draw_coordinates)
 
 class Bullet: # pray to god i'm doing this right
     def __init__(self, coordinates: list, velocity: list):
