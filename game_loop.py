@@ -5,6 +5,8 @@ player = Player()
 
 pygame.init()
 screen = Screen()
+clock = pygame.time.Clock()
+delta_time = 0
 
 
 class Inputs: # this works i guess
@@ -21,6 +23,8 @@ player = Player()
 gun = Gun()
 mouse = Mouse()
 drawable_objects = [map, player, gun, mouse] # idk this is what chat gpt told me to do so i'm doing it
+moving_objects = [player, gun]
+walls = [map]
 
 
 
@@ -42,8 +46,9 @@ while running:
 
 
     screen.draw(drawable_objects) # draw everything here
+    screen.move(moving_objects, walls)
 
-
+    delta_time = clock.tick(120) / 1000
 
 
 

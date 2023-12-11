@@ -38,9 +38,9 @@ class Player:
         self.SPEED_DIAGONAL = 212.13 
         self.coordinates = [0, 0]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
-    def move(self, walls: pygame.Mask, delta_time):
+    def move(self, walls: pygame.Mask):
         print(self.coordinates)
-        from game_loop import Inputs
+        from game_loop import Inputs, delta_time
 
         old_coordinates = self.coordinates
         horizontal_axis = (Inputs.keys[pygame.K_d] ^ Inputs.keys[pygame.K_a])
@@ -96,6 +96,9 @@ class Gun:
     bullets = []
     def draw(self, surface: pygame.Surface):
         pass # TODO
+    def move(self, walls):
+        pass # TODO i legit cant do this
+
     
 class Map:
     def __init__(self):
