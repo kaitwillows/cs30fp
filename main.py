@@ -67,14 +67,13 @@ class Player:
                 old_coordinates = self.coordinates
 
     def draw(self, surface: pygame.Surface):
-        # i am way too spiritually tired to do this properly, im probably gonna fail
         from game_loop import camera, screen
         draw_coordinates_x = screen.SCREEN_RESOLUTION[0]/2 + camera.mouse_camera_offset[0]
         draw_coordinates_y = screen.SCREEN_RESOLUTION[1]/2 + camera.mouse_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
         surface.blit(self.IMAGE, draw_coordinates)
 
-class Bullet: # pray to god i'm doing this right
+class Bullet: 
     def __init__(self, coordinates: list, velocity: list):
         self.coordinates = coordinates
         self.velocity = velocity
@@ -125,5 +124,3 @@ class Camera: # this might have a lot of problems with circular importing but we
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
         self.combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]
-        
-
