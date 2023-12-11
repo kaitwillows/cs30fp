@@ -5,7 +5,6 @@ import pygame
 class Screen:
     SCREEN_RESOLUTION = (500, 500)
     BACKGROUND = (255, 255, 255)
-
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
     def move(self, moving_objects: list[object], walls: pygame.mask):
@@ -39,10 +38,9 @@ class Player:
         self.coordinates = [0, 0]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
     def move(self, walls: pygame.Mask):
-        print(self.coordinates)
         from game_loop import Inputs, delta_time
 
-        old_coordinates = self.coordinates
+        old_coordinates = self.coordinates[:]
         horizontal_axis = (Inputs.keys[pygame.K_d] ^ Inputs.keys[pygame.K_a])
         vertical_axis = (Inputs.keys[pygame.K_w] ^ Inputs.keys[pygame.K_s])
         if horizontal_axis and vertical_axis:
@@ -54,27 +52,27 @@ class Player:
                 self.coordinates[0] += speed * delta_time
             else:
                 self.coordinates[0] -= speed * delta_time
-            if walls.overlap(self.hitbox, self.coordinates):
+            if walls[0].MASK.overlap(self.hitbox, self.coordinates):
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
         if vertical_axis:
-            if Inputs.keys[pygame.K_w]:
+            if Inputs.keys[pygame.K_s]:
                 self.coordinates[1] += speed * delta_time
             else:
                 self.coordinates[1] -= speed * delta_time
-            if walls.overlap(self.hitbox, self.coordinates):
+            if walls[0].MASK.overlap(self.hitbox, self.coordinates):
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
 
     def draw(self, surface: pygame.Surface):
         # i am way too spiritually tired to do this properly, im probably gonna fail
-        from game_loop import camera
-        draw_coordinates_x = self.coordinates[0] + camera.mouse_camera_offset[0]
-        draw_coordinates_y = self.coordinates[1] + camera.mouse_camera_offset[1]
+        from game_loop import camera, screen
+        draw_coordinates_x = screen.SCREEN_RESOLUTION[0]/2 + camera.mouse_camera_offset[0]
+        draw_coordinates_y = screen.SCREEN_RESOLUTION[1]/2 + camera.mouse_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
-        surface.blit(self.image, draw_coordinates)
+        surface.blit(self.IMAGE, draw_coordinates)
 
 class Bullet: # pray to god i'm doing this right
     def __init__(self, coordinates: list, velocity: list):
@@ -105,6 +103,7 @@ class Map:
     def draw(self, surface: pygame.Surface):
         from game_loop import camera
         surface.blit(self.IMAGE, camera.combined_camera_offset)
+        print(camera.combined_camera_offset)
 
 class Camera: # this might have a lot of problems with circular importing but we can deal with that when we get there
     def __init__(self):
@@ -119,11 +118,11 @@ class Camera: # this might have a lot of problems with circular importing but we
 
         centered_mouse_x = mouse_x - Screen.SCREEN_RESOLUTION[0]/2
         mouse_camera_offset_x = -centered_mouse_x * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_x = player.coordinates[0] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center on player and add mouse offset
+        combined_camera_offset_x = -player.coordinates[0] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center on player and add mouse offset
 
         centered_mouse_y = mouse_y - Screen.SCREEN_RESOLUTION[1]/2
         mouse_camera_offset_y = -centered_mouse_y * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_y = player.coordinates[1] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_y # center on player and add mouse offset
+        combined_camera_offset_y = -player.coordinates[1] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_y # center on player and add mouse offset
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
         self.combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]

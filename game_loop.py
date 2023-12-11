@@ -42,6 +42,7 @@ while running:
         if event.type == pygame.MOUSEBUTTONUP:
             if event.button == 1:
                 Inputs.left_mouse_down = False # is this right?
+    Inputs.keys = pygame.key.get_pressed()
 
 
 
