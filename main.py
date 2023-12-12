@@ -10,7 +10,6 @@ class Screen:
     def move(self, moving_objects: list[object], walls: pygame.mask):
         for object in moving_objects:
             object.move(walls) # scared (warrented)
-
     def draw(self, drawable_objects):
         from game_loop import camera
         camera.update_camera_position()
@@ -32,10 +31,10 @@ class Mouse:
 class Player:
     def __init__(self):
         self.IMAGE = pygame.image.load("./assets/ralsei.png")
-        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_width())
+        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13 
-        self.coordinates = [0, 0]
+        self.coordinates = [100, 100]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
     def move(self, walls: list):
         from game_loop import Inputs, delta_time
@@ -59,9 +58,9 @@ class Player:
             if wall.MASK.overlap(self.hitbox, self.coordinates): 
                 collision = True
         if collision:
-            self.coordinates = old_coordinates
+            self.coordinates = old_coordinates[:]
         else:
-            old_coordinates = self.coordinates
+            old_coordinates = self.coordinates[:]
 
         if Inputs.keys[pygame.K_s]:
             self.coordinates[1] += speed * delta_time
@@ -74,12 +73,9 @@ class Player:
             if wall.MASK.overlap(self.hitbox, self.coordinates): 
                 collision = True
         if collision:
-            print(f"aaa theres collision {self.coordinates}, {old_coordinates}")
-            
-            self.coordinates = old_coordinates
+            self.coordinates = old_coordinates[:]
         else:
-            old_coordinates = self.coordinates
-
+            old_coordinates = self.coordinates[:]
     def draw(self, surface: pygame.Surface):
         from game_loop import camera, screen
         draw_coordinates_x = screen.SCREEN_RESOLUTION[0]/2 + camera.mouse_camera_offset[0]
@@ -88,22 +84,43 @@ class Player:
         surface.blit(self.IMAGE, draw_coordinates)
 
 class Bullet: 
+    IMAGE = pygame.image.load("./assets/bullet.png")
     def __init__(self, coordinates: list, velocity: list):
         self.coordinates = coordinates
         self.velocity = velocity
     def move(self):
         self.coordinates[0] += self.velocity[0]
         self.coordinates[1] += self.velocity[1]
+    def draw(self, surface: pygame.Surface):
+        from game_loop import camera
+        draw_coordinates_x = self.coordinates[0] + camera.combined_camera_offset[0]
+        draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
+        surface.blit()
 
 class Gun:
-    BULLET_IMAGE = pygame.image.load("./assets/bullet.png") 
-    FIRE_RATE = .3
-    time_since_last_fire = 0.0
-    bullets = []
+    def __init__(self):
+        FIRE_RATE = .3
+        time_since_last_fire = 0.0
+        bullets = []
+    def fire(self): # scared pt 2
+        from game_loop import delta_time, Inputs
+        import math
+
+        self.time_since_last_fire += delta_time 
+        
+        if Inputs.left_mouse_down == False:
+            return
+        if self.time_since_last_fire < self.FIRE_RATE:
+            return
+
+        magnitude = math.sqrt(x**2 + y**2) # get these though aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+
+    def move(self, walls):
+        # create new bullet (if applicable)
+
+        pass # TODO i legit cant do this
     def draw(self, surface: pygame.Surface):
         pass # TODO
-    def move(self, walls):
-        pass # TODO i legit cant do this
 
     
 class Map:
@@ -117,12 +134,11 @@ class Map:
         from game_loop import camera
         surface.blit(self.IMAGE, camera.combined_camera_offset)
 
-class Camera: # this might have a lot of problems with circular importing but we can deal with that when we get there
+class Camera:
     def __init__(self):
         self.MOUSE_CAMERA_OFFSET_INFLUENCE = 0.5 
         self.mouse_camera_offset = [0, 0] # for the player (wait)
         self.combined_camera_offset = [0, 0]
-
     def update_camera_position(self): # could be better in reverse order?
         from game_loop import player
 
@@ -134,7 +150,7 @@ class Camera: # this might have a lot of problems with circular importing but we
 
         centered_mouse_y = mouse_y - Screen.SCREEN_RESOLUTION[1]/2
         mouse_camera_offset_y = -centered_mouse_y * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_y = -player.coordinates[1] + Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_y # center on player and add mouse offset
+        combined_camera_offset_y = -player.coordinates[1] + Screen.SCREEN_RESOLUTION[1]/2 + mouse_camera_offset_y # center on player and add mouse offset
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
         self.combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]
