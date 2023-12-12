@@ -37,7 +37,7 @@ class Player:
         self.SPEED_DIAGONAL = 212.13 
         self.coordinates = [0, 0]
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
-    def move(self, walls: pygame.Mask):
+    def move(self, walls: list[pygame.Mask]):
         from game_loop import Inputs, delta_time
 
         old_coordinates = self.coordinates[:]
@@ -52,16 +52,29 @@ class Player:
                 self.coordinates[0] += speed * delta_time
             else:
                 self.coordinates[0] -= speed * delta_time
-            if walls[0].MASK.overlap(self.hitbox, self.coordinates): # add in an offset here ffs
+            
+            # collision handling
+            for wall in walls:
+                collision = False
+                if wall.overlap(self.hitbox, self.coordinates): 
+                    collision = True
+            if collision:
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
+
         if vertical_axis:
             if Inputs.keys[pygame.K_s]:
                 self.coordinates[1] += speed * delta_time
             else:
                 self.coordinates[1] -= speed * delta_time
-            if walls[0].MASK.overlap(self.hitbox, self.coordinates):
+
+            # collision handling
+            for wall in walls:
+                collision = False
+                if wall.overlap(self.hitbox, self.coordinates): 
+                    collision = True
+            if collision:
                 self.coordinates = old_coordinates
             else:
                 old_coordinates = self.coordinates
