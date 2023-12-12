@@ -3,7 +3,7 @@ import pygame
 
 
 class Screen:
-    SCREEN_RESOLUTION = (500, 500)
+    SCREEN_RESOLUTION = (1280, 900)
     BACKGROUND = (255, 255, 255)
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
@@ -54,8 +54,8 @@ class Player:
             self.coordinates[0] -= speed * delta_time
         
         # collision handling
+        collision = False
         for wall in walls:
-            collision = False
             if wall.MASK.overlap(self.hitbox, self.coordinates): 
                 collision = True
         if collision:
@@ -69,11 +69,13 @@ class Player:
             self.coordinates[1] -= speed * delta_time
 
         # collision handling
+        collision = False
         for wall in walls:
-            collision = False
             if wall.MASK.overlap(self.hitbox, self.coordinates): 
                 collision = True
         if collision:
+            print(f"aaa theres collision {self.coordinates}, {old_coordinates}")
+            
             self.coordinates = old_coordinates
         else:
             old_coordinates = self.coordinates
@@ -128,11 +130,11 @@ class Camera: # this might have a lot of problems with circular importing but we
 
         centered_mouse_x = mouse_x - Screen.SCREEN_RESOLUTION[0]/2
         mouse_camera_offset_x = -centered_mouse_x * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_x = -player.coordinates[0] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center on player and add mouse offset
+        combined_camera_offset_x = -player.coordinates[0] + Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center on player and add mouse offset
 
         centered_mouse_y = mouse_y - Screen.SCREEN_RESOLUTION[1]/2
         mouse_camera_offset_y = -centered_mouse_y * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_y = -player.coordinates[1] - Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_y # center on player and add mouse offset
+        combined_camera_offset_y = -player.coordinates[1] + Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_y # center on player and add mouse offset
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
         self.combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]
