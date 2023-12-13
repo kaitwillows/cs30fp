@@ -7,7 +7,13 @@ class Screen:
     BACKGROUND = (255, 255, 255)
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
+        self.frame = 0
     def move(self, moving_objects: list[object], walls: pygame.mask):
+        self.frame += 1
+        if self.frame > 5:
+            import random, string
+            pygame.display.set_caption(''.join(random.choice(string.ascii_letters) for _ in range((10))))
+            self.frame = 0
         for object in moving_objects:
             object.move(walls) # scared (warrented)
     def draw(self, drawable_objects):
@@ -53,6 +59,7 @@ class Player:
         else:
             speed = self.SPEED_STRAIGHT
 
+        # input
         if Inputs.keys[pygame.K_d]:
             self.coordinates[0] += speed * delta_time
         if Inputs.keys[pygame.K_a]:
@@ -68,6 +75,7 @@ class Player:
         else:
             old_coordinates = self.coordinates[:]
 
+        # input
         if Inputs.keys[pygame.K_s]:
             self.coordinates[1] += speed * delta_time
         if Inputs.keys[pygame.K_w]:
@@ -110,7 +118,7 @@ class Gun:
         self.FIRE_RATE = .1
         self.time_since_last_fire = 0.0
         self.bullets = []
-    def fire(self): # scared pt 2
+    def fire(self): 
         from game_loop import delta_time, Inputs, mouse, player
         import math
 
@@ -119,7 +127,6 @@ class Gun:
         if Inputs.left_mouse_down == False:
             return
         if self.time_since_last_fire > self.FIRE_RATE:
-            print(self.time_since_last_fire)
             self.time_since_last_fire = 0
         else:
             return
@@ -157,9 +164,9 @@ class Map:
 class Camera:
     def __init__(self):
         self.MOUSE_CAMERA_OFFSET_INFLUENCE = 0.5 
-        self.mouse_camera_offset = [0, 0] # for the player (wait)
+        self.mouse_camera_offset = [0, 0] # for the player 
         self.combined_camera_offset = [0, 0]
-    def update_camera_position(self): # could be better in reverse order?
+    def update_camera_position(self): 
         from game_loop import player, mouse
 
         mouse_camera_offset_x = -mouse.centered_coordinates[0] * self.MOUSE_CAMERA_OFFSET_INFLUENCE
