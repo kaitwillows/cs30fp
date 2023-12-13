@@ -15,7 +15,6 @@ class Inputs: # this works i guess
     keys = pygame.key.get_pressed() 
 
 
-
 camera = Camera() 
 
 map = Map() 
@@ -27,15 +26,14 @@ moving_objects = [player, gun]
 walls = [map] 
 
 
-
 running = True 
 while running: 
 
     for event in pygame.event.get(): 
-        
+
         if event.type == pygame.QUIT: 
             running = False 
-        
+
         if event.type == pygame.MOUSEBUTTONDOWN: 
             if event.button == 1: # left mouse click 
                 Inputs.left_mouse_down = True 
@@ -49,7 +47,7 @@ while running:
     screen.draw(drawable_objects) # draw everything here 
     screen.move(moving_objects, walls) 
 
-    delta_time = clock.tick(120) / 1000 
+    delta_time = clock.tick(60) / 1000 
 
 
 
