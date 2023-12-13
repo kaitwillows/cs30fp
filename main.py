@@ -3,7 +3,7 @@ import pygame
 
 
 class Screen:
-    SCREEN_RESOLUTION = (1280, 900)
+    SCREEN_RESOLUTION = (800, 800)
     BACKGROUND = (255, 255, 255)
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
@@ -19,13 +19,19 @@ class Screen:
         pygame.display.flip()
 
 class Mouse:
-    IMAGE = pygame.image.load("./assets/crosshair.png")
-    SIZE = (IMAGE.get_width(), IMAGE.get_width())
-    DRAW_OFFSET = (SIZE[0]/2, SIZE[1]/2)
+    def __init__(self):
+        self.IMAGE = pygame.image.load("./assets/crosshair.png")
+        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_width())
+        self.DRAW_OFFSET = (self.SIZE[0]/2, self.SIZE[1]/2)
+        self.centered_coordinates = [0, 0]
     def draw(self, surface: pygame.Surface):
+        from game_loop import screen
         mouse_coordinates = pygame.mouse.get_pos()
-        crosshair_coordinates = (mouse_coordinates[0] - Mouse.DRAW_OFFSET[0], mouse_coordinates[1] - Mouse.DRAW_OFFSET[1])
-        surface.blit(Mouse.IMAGE, crosshair_coordinates)
+        centered_coordinates_x = mouse_coordinates[0] - screen.SCREEN_RESOLUTION[0]/2
+        centered_coordinates_y = mouse_coordinates[1] - screen.SCREEN_RESOLUTION[1]/2
+        self.centered_coordinates = [centered_coordinates_x, centered_coordinates_y]
+        crosshair_coordinates = (mouse_coordinates[0] - self.DRAW_OFFSET[0], mouse_coordinates[1] - self.DRAW_OFFSET[1])
+        surface.blit(self.IMAGE, crosshair_coordinates)
 
 
 class Player:
@@ -95,15 +101,16 @@ class Bullet:
         from game_loop import camera
         draw_coordinates_x = self.coordinates[0] + camera.combined_camera_offset[0]
         draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
-        surface.blit()
+        draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
+        surface.blit(self.IMAGE, draw_coordinates)
 
 class Gun:
     def __init__(self):
-        FIRE_RATE = .3
-        time_since_last_fire = 0.0
-        bullets = []
+        self.FIRE_RATE = .3
+        self.time_since_last_fire = 0.0
+        self.bullets = []
     def fire(self): # scared pt 2
-        from game_loop import delta_time, Inputs
+        from game_loop import delta_time, Inputs, mouse, player
         import math
 
         self.time_since_last_fire += delta_time 
@@ -113,14 +120,24 @@ class Gun:
         if self.time_since_last_fire < self.FIRE_RATE:
             return
 
-        magnitude = math.sqrt(x**2 + y**2) # get these though aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa
+        raw_x, raw_y = mouse.centered_coordinates
+        magnitude = math.sqrt(raw_x**2 + raw_y**2)
+        if magnitude == 0:
+            x_velocity = 0
+            y_velocity = 0
+        else:
+            x_velocity = raw_x / magnitude
+            y_velocity = raw_y / magnitude
+
+        self.bullets.append(Bullet(player.coordinates, [x_velocity, y_velocity]))
 
     def move(self, walls):
-        # create new bullet (if applicable)
-
-        pass # TODO i legit cant do this
+        self.fire()
+        for bullet in self.bullets:
+            bullet.move()
     def draw(self, surface: pygame.Surface):
-        pass # TODO
+        for bullet in self.bullets:
+            bullet.draw(surface)
 
     
 class Map:
@@ -140,16 +157,12 @@ class Camera:
         self.mouse_camera_offset = [0, 0] # for the player (wait)
         self.combined_camera_offset = [0, 0]
     def update_camera_position(self): # could be better in reverse order?
-        from game_loop import player
+        from game_loop import player, mouse
 
-        mouse_x, mouse_y = pygame.mouse.get_pos()
-
-        centered_mouse_x = mouse_x - Screen.SCREEN_RESOLUTION[0]/2
-        mouse_camera_offset_x = -centered_mouse_x * self.MOUSE_CAMERA_OFFSET_INFLUENCE
+        mouse_camera_offset_x = -mouse.centered_coordinates[0] * self.MOUSE_CAMERA_OFFSET_INFLUENCE
         combined_camera_offset_x = -player.coordinates[0] + Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center on player and add mouse offset
 
-        centered_mouse_y = mouse_y - Screen.SCREEN_RESOLUTION[1]/2
-        mouse_camera_offset_y = -centered_mouse_y * self.MOUSE_CAMERA_OFFSET_INFLUENCE
+        mouse_camera_offset_y = -mouse.centered_coordinates[1] * self.MOUSE_CAMERA_OFFSET_INFLUENCE
         combined_camera_offset_y = -player.coordinates[1] + Screen.SCREEN_RESOLUTION[1]/2 + mouse_camera_offset_y # center on player and add mouse offset
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
