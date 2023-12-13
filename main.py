@@ -106,7 +106,8 @@ class Bullet:
 
 class Gun:
     def __init__(self):
-        self.FIRE_RATE = .3
+        self.VELOCITY_MULTIPLIER = 5
+        self.FIRE_RATE = .1
         self.time_since_last_fire = 0.0
         self.bullets = []
     def fire(self): # scared pt 2
@@ -117,19 +118,21 @@ class Gun:
         
         if Inputs.left_mouse_down == False:
             return
-        if self.time_since_last_fire < self.FIRE_RATE:
+        if self.time_since_last_fire > self.FIRE_RATE:
+            print(self.time_since_last_fire)
+            self.time_since_last_fire = 0
+        else:
             return
-
         raw_x, raw_y = mouse.centered_coordinates
         magnitude = math.sqrt(raw_x**2 + raw_y**2)
         if magnitude == 0:
             x_velocity = 0
             y_velocity = 0
         else:
-            x_velocity = raw_x / magnitude
-            y_velocity = raw_y / magnitude
+            x_velocity = raw_x / magnitude * self.VELOCITY_MULTIPLIER
+            y_velocity = raw_y / magnitude * self.VELOCITY_MULTIPLIER
 
-        self.bullets.append(Bullet(player.coordinates, [x_velocity, y_velocity]))
+        self.bullets.append(Bullet(player.coordinates[:], [x_velocity, y_velocity]))
 
     def move(self, walls):
         self.fire()
