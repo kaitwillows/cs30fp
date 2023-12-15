@@ -97,12 +97,12 @@ class Enemy:
     def __init__(self, spawn_position):
         self.IMAGE = pygame.image.load("./assets/ralsei.png") # like
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
-        self.SPEED_STRAIGHT = 100
-        self.SPEED_DIAGONAL = 70.71
+        self.SPEED_STRAIGHT = 300
+        self.SPEED_DIAGONAL = 270
         self.coordinates = spawn_position
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
         self.time_since_move = 0
-        self.MOVE_RATE = 0.5
+        self.MOVE_RATE = 0.2
         self.directions = [False, False, False, False, False, False, False, False, False]
 
     def move(self, walls: list):
