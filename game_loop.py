@@ -42,10 +42,8 @@ while running:
                 Inputs.left_mouse_down = False # is this right? 
     Inputs.keys = pygame.key.get_pressed() 
 
-
-
-    screen.draw(drawable_objects) # draw everything here 
     screen.move(moving_objects, walls) 
+    screen.draw(drawable_objects) # draw everything here 
 
     delta_time = clock.tick(60) / 1000 
 

@@ -1,7 +1,7 @@
 import pygame
 
 class Screen:
-    SCREEN_RESOLUTION = (1920, 1080)
+    SCREEN_RESOLUTION = (1920*3, 1080)
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
@@ -106,8 +106,9 @@ class Bullet:
         if self.alive == False:
             return
         from logic import collision
-        self.coordinates[0] += self.velocity[0]
-        self.coordinates[1] += self.velocity[1]
+        from game_loop import player, delta_time
+        self.coordinates[0] += self.velocity[0] * delta_time
+        self.coordinates[1] += self.velocity[1] * delta_time
         if collision(walls, self.hitbox, self.coordinates):
             self.alive = False
 
@@ -122,8 +123,8 @@ class Bullet:
 
 class Gun:
     def __init__(self):
-        self.VELOCITY_MULTIPLIER = 5
-        self.FIRE_RATE = .1
+        self.VELOCITY_MULTIPLIER = 1000
+        self.FIRE_RATE = .2
         self.time_since_last_fire = 0.0
         self.bullets = []
 
@@ -152,8 +153,12 @@ class Gun:
 
     def move(self, walls):
         self.fire()
+        new_bullets = [] # to remove dead bullets
         for bullet in self.bullets:
             bullet.move(walls)
+            if bullet.alive == True:
+                new_bullets.append(bullet)
+        self.bullets = new_bullets
 
     def draw(self, surface: pygame.Surface):
         for bullet in self.bullets:
@@ -162,7 +167,7 @@ class Gun:
 class Map:
     def __init__(self):
         self.RAW_IMAGE = pygame.image.load("./assets/map1.png").convert_alpha()
-        self.SCALE_FACTOR = 50
+        self.SCALE_FACTOR = 30
         self.IMAGE = pygame.Surface((self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR), pygame.SRCALPHA)
         self.IMAGE = pygame.transform.scale(self.RAW_IMAGE, (self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR), self.IMAGE)
         self.MASK = pygame.mask.from_surface(self.IMAGE)
@@ -170,6 +175,9 @@ class Map:
     def draw(self, surface: pygame.Surface):
         from game_loop import camera
         surface.blit(self.IMAGE, camera.combined_camera_offset)
+
+    def collide_action():
+        pass # i don't think this has one
 
 class Camera:
     def __init__(self):
