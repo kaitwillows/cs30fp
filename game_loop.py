@@ -1,7 +1,6 @@
 import pygame 
 from main import * 
 
-player = Player() 
 
 pygame.init() 
 screen = Screen() 
@@ -18,11 +17,14 @@ class Inputs: # this works i guess
 camera = Camera() 
 
 map = Map() 
-player = Player() 
+player = Player([288, 262])
+# enemy = Enemy([2674, 2661])
+enemy = Enemy([300, 300])
 gun = Gun() 
+enemy_gun = EnemyGun()
 mouse = Mouse() 
-drawable_objects = [map, player, gun, mouse] # idk this is what chat gpt told me to do so i'm doing it 
-moving_objects = [player, gun] 
+drawable_objects = [map, player, enemy, gun, enemy_gun, mouse] # idk this is what chat gpt told me to do so i'm doing it 
+moving_objects = [player, enemy, gun, enemy_gun] 
 walls = [map] 
 
 
@@ -45,8 +47,8 @@ while running:
     screen.move(moving_objects, walls) 
     screen.draw(drawable_objects) # draw everything here 
 
-    delta_time = clock.tick(60) / 1000 
-
+    delta_time = clock.tick(288) / 1000 
+pygame.quit()
 
 
 

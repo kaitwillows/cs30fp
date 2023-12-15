@@ -1,7 +1,7 @@
 import pygame
 
 class Screen:
-    SCREEN_RESOLUTION = (1920*3, 1080)
+    SCREEN_RESOLUTION = (1000, 1000)
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
@@ -42,12 +42,12 @@ class Mouse:
         surface.blit(self.IMAGE, crosshair_coordinates)
 
 class Player:
-    def __init__(self):
+    def __init__(self, spawn_position):
         self.IMAGE = pygame.image.load("./assets/ralsei.png")
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13
-        self.coordinates = [100, 100]
+        self.coordinates = spawn_position
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
 
     def move(self, walls: list):
@@ -92,6 +92,130 @@ class Player:
         draw_coordinates_y = screen.SCREEN_RESOLUTION[1]/2 + camera.mouse_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
         surface.blit(self.IMAGE, draw_coordinates)
+
+class Enemy:
+    def __init__(self, spawn_position):
+        self.IMAGE = pygame.image.load("./assets/ralsei.png") # like
+        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
+        self.SPEED_STRAIGHT = 100
+        self.SPEED_DIAGONAL = 70.71
+        self.coordinates = spawn_position
+        self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
+        self.time_since_move = 0
+        self.MOVE_RATE = 0.5
+        self.directions = [False, False, False, False, False, False, False, False, False]
+
+    def move(self, walls: list):
+        from game_loop import Inputs, delta_time, player
+        from logic import collision
+        import random
+        self.time_since_move += delta_time
+        if self.time_since_move > self.MOVE_RATE:
+            self.directions = []
+            self.time_since_move = 0
+            for i in range(9):
+                self.directions.append(random.choice([True, False]))
+            if random.random() < 0.5:
+                if player.coordinates[0] - self.coordinates[0] < 0:
+                    self.directions[4] = True
+                    self.directions[6] = False
+                else:
+                    self.directions[4] = False
+                    self.directions[6] = True
+            if random.random() < 0.5:
+                if player.coordinates[1] - self.coordinates[1] < 0:
+                    self.directions[8] = True
+                    self.directions[2] = False
+                else:
+                    self.directions[8] = False
+                    self.directions[2] = True
+
+        old_coordinates = self.coordinates[:]
+        horizontal_axis = (self.directions[6] ^ self.directions[4])
+        vertical_axis = (self.directions[8] ^ self.directions[2])
+        if horizontal_axis and vertical_axis:
+            speed = self.SPEED_DIAGONAL
+        else:
+            speed = self.SPEED_STRAIGHT
+
+
+
+        # input
+        if self.directions[6]:
+            self.coordinates[0] += speed * delta_time
+        if self.directions[4]:
+            self.coordinates[0] -= speed * delta_time
+
+        # collision handling
+        if collision(walls, self.hitbox, self.coordinates):
+            self.coordinates = old_coordinates[:]
+        else:
+            old_coordinates = self.coordinates[:]
+
+        # input
+        if self.directions[2]:
+            self.coordinates[1] += speed * delta_time
+        if self.directions[8]:
+            self.coordinates[1] -= speed * delta_time
+
+        # collision handling
+        if collision(walls, self.hitbox, self.coordinates):
+            self.coordinates = old_coordinates[:]
+        else:
+            old_coordinates = self.coordinates[:]
+
+    def draw(self, surface: pygame.Surface):
+        from game_loop import camera, screen
+        draw_coordinates_x = self.coordinates[0] + camera.combined_camera_offset[0]
+        draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
+        draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
+        surface.blit(self.IMAGE, draw_coordinates)
+
+class EnemyGun:
+    def __init__(self):
+        self.VELOCITY_MULTIPLIER = 250
+        self.FIRE_RATE = .5
+        self.time_since_last_fire = 0.0
+        self.bullets = []
+
+    def fire(self): 
+        from game_loop import delta_time, Inputs, mouse, enemy, player
+        import math, random
+
+        self.time_since_last_fire += delta_time 
+
+        if random.random() < 0.90:
+            return
+        if self.time_since_last_fire > self.FIRE_RATE:
+            self.time_since_last_fire = 0
+        else:
+            return
+
+        raw_x =  player.coordinates[0] - enemy.coordinates[0]
+        raw_y =  player.coordinates[1] - enemy.coordinates[1]
+
+        magnitude = math.sqrt(raw_x**2 + raw_y**2)
+        if magnitude == 0:
+            x_velocity = 0
+            y_velocity = 0
+        else:
+            x_velocity = raw_x / magnitude * self.VELOCITY_MULTIPLIER
+            y_velocity = raw_y / magnitude * self.VELOCITY_MULTIPLIER
+
+        self.bullets.append(Bullet(enemy.coordinates[:], [x_velocity, y_velocity]))
+
+    def move(self, walls):
+        self.fire()
+        new_bullets = [] # to remove dead bullets
+        for bullet in self.bullets:
+            bullet.move(walls)
+            if bullet.alive == True:
+                new_bullets.append(bullet)
+        self.bullets = new_bullets
+
+    def draw(self, surface: pygame.Surface):
+        for bullet in self.bullets:
+            bullet.draw(surface)
 
 class Bullet: 
     def __init__(self, coordinates: list, velocity: list):
