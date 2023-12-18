@@ -325,7 +325,6 @@ class MiniMap:
         player_draw_pos_x = (player.coordinates[0] / self.map_size[0]) * self.minimap_size[0] + self.draw_offset
         player_draw_pos_y = (player.coordinates[1] / self.map_size[1]) * self.minimap_size[1]
         player_draw_pos = (player_draw_pos_x, player_draw_pos_y)
-        print(player_draw_pos)
         surface.blit(self.player_pixel, player_draw_pos)
 
         enemy_draw_pos_x = (enemy.coordinates[0] / self.map_size[0]) * self.minimap_size[0] + self.draw_offset
