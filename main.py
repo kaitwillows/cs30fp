@@ -1,7 +1,7 @@
 import pygame
 
 class Screen:
-    SCREEN_RESOLUTION = (1000, 1000)
+    SCREEN_RESOLUTION = (1280, 1024)
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
@@ -43,7 +43,7 @@ class Mouse:
 
 class Player:
     def __init__(self, spawn_position):
-        self.IMAGE = pygame.image.load("./assets/ralsei.png")
+        self.IMAGE = pygame.image.load("./assets/you.png")
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13
@@ -95,15 +95,15 @@ class Player:
 
 class Enemy:
     def __init__(self, spawn_position):
-        self.IMAGE = pygame.image.load("./assets/ralsei.png") # like
+        self.IMAGE = pygame.image.load("./assets/badguy.png") # like
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
-        self.SPEED_DIAGONAL = 270
+        self.SPEED_DIAGONAL = 212.13
         self.coordinates = spawn_position
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
         self.time_since_move = 0
-        self.MOVE_RATE = 0.2
-        self.directions = [False, False, False, False, False, False, False, False, False]
+        self.MOVE_RATE = 1
+        self.directions = [False, False, False, False, False, False, False, False, False] # please ignore all of whats in this class its not important
 
     def move(self, walls: list):
         from game_loop import Inputs, delta_time, player
@@ -173,7 +173,7 @@ class Enemy:
 
 class EnemyGun:
     def __init__(self):
-        self.VELOCITY_MULTIPLIER = 250
+        self.VELOCITY_MULTIPLIER = 500
         self.FIRE_RATE = .5
         self.time_since_last_fire = 0.0
         self.bullets = []
@@ -184,7 +184,7 @@ class EnemyGun:
 
         self.time_since_last_fire += delta_time 
 
-        if random.random() < 0.90:
+        if random.random() < 0.95:
             return
         if self.time_since_last_fire > self.FIRE_RATE:
             self.time_since_last_fire = 0
@@ -247,8 +247,8 @@ class Bullet:
 
 class Gun:
     def __init__(self):
-        self.VELOCITY_MULTIPLIER = 1000
-        self.FIRE_RATE = .2
+        self.VELOCITY_MULTIPLIER = 500
+        self.FIRE_RATE = .5
         self.time_since_last_fire = 0.0
         self.bullets = []
 
@@ -302,6 +302,36 @@ class Map:
 
     def collide_action():
         pass # i don't think this has one
+
+class MiniMap:
+    def __init__(self):
+        from game_loop import map, screen
+        self.RAW_IMAGE = pygame.image.load("./assets/map2.png")
+        self.SCALE_FACTOR = 2
+        self.IMAGE = pygame.Surface((self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR))
+        self.IMAGE = pygame.transform.scale(self.RAW_IMAGE, (self.RAW_IMAGE.get_width() * self.SCALE_FACTOR, self.RAW_IMAGE.get_height() * self.SCALE_FACTOR))
+        self.minimap_size = (self.IMAGE.get_width(), self.IMAGE.get_height())
+        self.map_size = (map.IMAGE.get_width(), map.IMAGE.get_height())
+        self.draw_offset = screen.SCREEN_RESOLUTION[0] - self.minimap_size[0]
+        self.player_pixel = pygame.Surface((3, 3))
+        self.player_pixel.fill((0, 255, 0))
+        self.enemy_pixel = pygame.Surface((3, 3))
+        self.enemy_pixel.fill("red")
+
+
+    def draw(self, surface: pygame.Surface):
+        from game_loop import player, enemy
+        surface.blit(self.IMAGE, (self.draw_offset, 0))
+        player_draw_pos_x = (player.coordinates[0] / self.map_size[0]) * self.minimap_size[0] + self.draw_offset
+        player_draw_pos_y = (player.coordinates[1] / self.map_size[1]) * self.minimap_size[1]
+        player_draw_pos = (player_draw_pos_x, player_draw_pos_y)
+        print(player_draw_pos)
+        surface.blit(self.player_pixel, player_draw_pos)
+
+        enemy_draw_pos_x = (enemy.coordinates[0] / self.map_size[0]) * self.minimap_size[0] + self.draw_offset
+        enemy_draw_pos_y = (enemy.coordinates[1] / self.map_size[1]) * self.minimap_size[1]
+        enemy_draw_pos = (enemy_draw_pos_x, enemy_draw_pos_y)
+        surface.blit(self.enemy_pixel, enemy_draw_pos)
 
 class Camera:
     def __init__(self):
