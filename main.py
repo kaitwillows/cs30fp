@@ -43,14 +43,18 @@ class Mouse:
 
 class Player:
     def __init__(self, spawn_position):
-        self.IMAGE = pygame.image.load("./assets/you.png")
-        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
+        self.hit_points = 3
+        self.image = pygame.image.load("./assets/player/you3.png")
+        self.SIZE = (self.image.get_width(), self.image.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13
         self.coordinates = spawn_position
         self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
 
     def move(self, walls: list):
+        if self.hit_points <= 0:
+            return
+
         from game_loop import Inputs, delta_time
         from logic import collision
 
@@ -91,11 +95,26 @@ class Player:
         draw_coordinates_x = screen.SCREEN_RESOLUTION[0]/2 + camera.mouse_camera_offset[0]
         draw_coordinates_y = screen.SCREEN_RESOLUTION[1]/2 + camera.mouse_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
-        surface.blit(self.IMAGE, draw_coordinates)
+        surface.blit(self.image, draw_coordinates)
+    
+    def hit(self):
+        self.hit_points -= 1
+        match self.hit_points:
+            case 3:
+                self.image = pygame.image.load("./assets/player/you3.png")
+            case 2:
+                self.image = pygame.image.load("./assets/player/you2.png")
+            case 1:
+                self.image = pygame.image.load("./assets/player/you1.png")
+            case 0:
+                self.image = pygame.image.load("./assets/player/you0.png")
+                print("oh no you died")
+                quit()
 
 class Enemy:
     def __init__(self, spawn_position):
-        self.IMAGE = pygame.image.load("./assets/badguy.png") # like
+        self.hit_points = 3
+        self.IMAGE = pygame.image.load("./assets/enemy/badguy3.png") # like
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13
@@ -106,6 +125,8 @@ class Enemy:
         self.directions = [False, False, False, False, False, False, False, False, False] # please ignore all of whats in this class its not important
 
     def move(self, walls: list):
+        if self.hit_points <= 0:
+            return
         from game_loop import Inputs, delta_time, player
         from logic import collision
         import random
@@ -171,6 +192,20 @@ class Enemy:
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
         surface.blit(self.IMAGE, draw_coordinates)
 
+    def hit(self):
+        self.hit_points -= 1
+        match self.hit_points:
+            case 3:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy3.png")
+            case 2:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy2.png")
+            case 1:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy1.png")
+            case 0:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy0.png")
+                print("omg you lived")
+                quit()
+
 class EnemyGun:
     def __init__(self):
         self.VELOCITY_MULTIPLIER = 500
@@ -181,6 +216,9 @@ class EnemyGun:
     def fire(self): 
         from game_loop import delta_time, Inputs, mouse, enemy, player
         import math, random
+
+        if enemy.hit_points <= 0:
+            return
 
         self.time_since_last_fire += delta_time 
 
@@ -202,7 +240,7 @@ class EnemyGun:
             x_velocity = raw_x / magnitude * self.VELOCITY_MULTIPLIER
             y_velocity = raw_y / magnitude * self.VELOCITY_MULTIPLIER
 
-        self.bullets.append(Bullet(enemy.coordinates[:], [x_velocity, y_velocity]))
+        self.bullets.append(EnemyBullet(enemy.coordinates[:], [x_velocity, y_velocity]))
 
     def move(self, walls):
         self.fire()
@@ -230,15 +268,65 @@ class Bullet:
         if self.alive == False:
             return
         from logic import collision
-        from game_loop import player, delta_time
+        from game_loop import player, enemy, delta_time
         self.coordinates[0] += self.velocity[0] * delta_time
         self.coordinates[1] += self.velocity[1] * delta_time
+
+        enemy_test_x = self.coordinates[0] - enemy.coordinates[0]
+        enemy_test_y = self.coordinates[1] - enemy.coordinates[1]
+        try:
+            if enemy.hitbox.get_at((enemy_test_x, enemy_test_y)):
+                self.alive = False
+                enemy.hit()
+        except:
+            pass
+
         if collision(walls, self.hitbox, self.coordinates):
             self.alive = False
+        
 
     def draw(self, surface: pygame.Surface):
+        # if self.alive == False:
+        #     return
+        from game_loop import camera
+        draw_coordinates_x = self.coordinates[0] + camera.combined_camera_offset[0]
+        draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
+        draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
+        surface.blit(self.IMAGE, draw_coordinates)
+
+class EnemyBullet: 
+    def __init__(self, coordinates: list, velocity: list):
+        self.IMAGE = pygame.image.load("./assets/bullet.png")
+        self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
+        self.coordinates = coordinates
+        self.velocity = velocity
+        self.hitbox = pygame.mask.from_surface(pygame.Surface((self.SIZE)))
+        self.alive = True
+
+    def move(self, walls):
         if self.alive == False:
             return
+        from logic import collision
+        from game_loop import player, enemy, delta_time
+        self.coordinates[0] += self.velocity[0] * delta_time
+        self.coordinates[1] += self.velocity[1] * delta_time
+        
+        player_test_x = self.coordinates[0] - player.coordinates[0]
+        player_test_y = self.coordinates[1] - player.coordinates[1]
+        try:
+            if player.hitbox.get_at((player_test_x, player_test_y)):
+                self.alive = False
+                player.hit()
+        except:
+            pass
+
+        if collision(walls, self.hitbox, self.coordinates):
+            self.alive = False
+        
+
+    def draw(self, surface: pygame.Surface):
+        # if self.alive == False:
+        #     return
         from game_loop import camera
         draw_coordinates_x = self.coordinates[0] + camera.combined_camera_offset[0]
         draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
@@ -255,6 +343,9 @@ class Gun:
     def fire(self): 
         from game_loop import delta_time, Inputs, mouse, player
         import math
+
+        if player.hit_points <= 0:
+            return
 
         self.time_since_last_fire += delta_time 
 
