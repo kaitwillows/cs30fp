@@ -7,16 +7,10 @@ class Screen:
 
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
-        self.frame = 0
 
     def move(self, moving_objects: list[object], walls: pygame.mask):
-        self.frame += 1
-        if self.frame > 5:
-            import random, string
-            # pygame.display.set_caption(''.join(random.choice(string.ascii_letters) for _ in range((100))))
-            self.frame = 0
         for object in moving_objects:
-            object.move(walls) # scared (warrented)
+            object.move(walls) 
 
     def draw(self, drawable_objects):
         from game_loop import camera
@@ -57,9 +51,6 @@ class Map:
     def draw(self, surface: pygame.Surface):
         from game_loop import camera
         surface.blit(self.IMAGE, camera.combined_camera_offset)
-
-    def collide_action():
-        pass # i don't think this has one
 
 
 class MiniMap:
