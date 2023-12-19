@@ -1,5 +1,5 @@
 import pygame 
-from main import * 
+from game_objects import * 
 
 
 pygame.init() 
@@ -19,12 +19,11 @@ camera = Camera()
 map = Map() 
 player = Player([288, 262])
 enemy = Enemy([2674, 2661])
-# enemy = Enemy([300, 300])
 gun = Gun() 
 enemy_gun = EnemyGun()
 mouse = Mouse() 
 minimap = MiniMap()
-drawable_objects = [map, player, enemy, gun, enemy_gun, minimap, mouse] # idk this is what chat gpt told me to do so i'm doing it 
+drawable_objects = [map, player, enemy, gun, enemy_gun, minimap, mouse]
 moving_objects = [player, enemy, gun, enemy_gun] 
 walls = [map] 
 
@@ -41,12 +40,12 @@ while running:
                 Inputs.left_mouse_down = True 
         if event.type == pygame.MOUSEBUTTONUP: 
             if event.button == 1: 
-                Inputs.left_mouse_down = False # is this right? 
+                Inputs.left_mouse_down = False 
 
     Inputs.keys = pygame.key.get_pressed() 
 
     screen.move(moving_objects, walls) 
-    screen.draw(drawable_objects) # draw everything here 
+    screen.draw(drawable_objects) 
 
     delta_time = clock.tick(288) / 1000 
 pygame.quit()
