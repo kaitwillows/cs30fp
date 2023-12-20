@@ -1,7 +1,7 @@
 import pygame
 
 
-class Screen:
+class Screen: # screen is the game window, it also handles logic and rendering for all game objects
     SCREEN_RESOLUTION = (1280, 1024)
     BACKGROUND = (255, 255, 255)
 
@@ -18,7 +18,7 @@ class Screen:
         self.screen.fill("grey")
         for object in drawable_objects:
             object.draw(self.screen)
-        pygame.display.flip()
+        pygame.display.flip() # update the window after everything is drawn
 
 
 class Camera:
