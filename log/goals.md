@@ -1,1 +1,0 @@
-my only goal rn is to make it to tomorrow
