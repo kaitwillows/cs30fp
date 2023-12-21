@@ -171,8 +171,10 @@ class Player:
                 self.image = pygame.image.load("./assets/player/you1.png")
             case 0:
                 self.image = pygame.image.load("./assets/player/you0.png")
-                print("oh no you died")
-                quit()
+                import sys, json
+                from game_loop import running
+                sys.exit(1)
+                
 
 
 class Gun:
@@ -359,8 +361,14 @@ class Enemy: #Enemy is almost entirely like Player, except it moves in random di
                 self.IMAGE = pygame.image.load("./assets/enemy/badguy1.png")
             case 0:
                 self.IMAGE = pygame.image.load("./assets/enemy/badguy0.png")
-                print("omg you lived")
-                quit()
+                import sys, json
+                print("you win!!!")
+                with open('scores.json', 'r') as file:
+                    scores = json.load(file)
+                scores['player'] += 1
+                with open('data.json', 'w') as file:
+                    json.dump(scores, file)
+                sys.exit(2)
 
 
 class EnemyGun:
@@ -434,6 +442,9 @@ class EnemyBullet:
             if player.hitbox.get_at((player_test_x, player_test_y)):
                 self.alive = False
                 player.hit()
+        except SystemExit:
+            import sys
+            sys.exit(1)
         except:
             pass
 
