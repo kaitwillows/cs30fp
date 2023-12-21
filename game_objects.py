@@ -172,7 +172,6 @@ class Player:
             case 0:
                 self.image = pygame.image.load("./assets/player/you0.png")
                 import sys, json
-                from game_loop import running
                 sys.exit(1)
                 
 
