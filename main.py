@@ -3,7 +3,9 @@ import subprocess
 import json
 import os
 
+
 os.system('cls')
+print("\n")
 
 while True:
     
@@ -34,9 +36,11 @@ while True:
             os.system('cls')
             result = subprocess.run(['python', 'game_loop.py'], capture_output=True, text=True).returncode
             if result == 1:
+                print("game quit unexpectedly\n")
+            elif result == 2:
                 print("enemy won :(\n")
                 scores['enemy'] += 1
-            elif result == 2:
+            elif result == 3:
                 print("player won!!!\n")
                 scores['player'] += 1
             

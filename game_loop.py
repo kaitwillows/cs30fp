@@ -1,9 +1,11 @@
-import pygame 
+import pygame, json
 from game_objects import * 
 
+with open('scores.json', 'r') as file:
+    scores = json.load(file)
 
 pygame.init() 
-screen = Screen() 
+screen = Screen((scores['resolution_x'], scores['resolution_y'])) 
 clock = pygame.time.Clock() 
 delta_time = 0 
 

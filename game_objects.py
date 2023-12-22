@@ -3,8 +3,8 @@ import pygame
 
 class Screen: # screen is the game window, it also handles logic and rendering for all game objects
 
-    def __init__(self):
-        self.SCREEN_RESOLUTION = (1280, 1024) # ideally set this to your screen resolution
+    def __init__(self, SCREEN_RESOLUTION):
+        self.SCREEN_RESOLUTION = SCREEN_RESOLUTION # ideally set this to your screen resolution
         self.BACKGROUND = (255, 255, 255)
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
         pygame.mouse.set_visible(False)
@@ -164,7 +164,7 @@ class Player:
         if self.hit_points == -1:
             import sys, time
             time.sleep(1)
-            sys.exit(1)
+            sys.exit(2)
         if self.hit_points == 0: # this allows the player to be drawn once more without a sprite before the game quits
             self.hit_points += -1
     
@@ -258,7 +258,7 @@ class Bullet:
                 enemy.hit()
         except SystemExit:
             import sys
-            sys.exit(2)
+            sys.exit(3)
         except:
             pass
 
@@ -359,7 +359,7 @@ class Enemy: #Enemy is almost entirely like Player, except it moves in random di
         if self.hit_points == -1:
             import sys, time
             time.sleep(1)
-            sys.exit(2)
+            sys.exit(3)
         if self.hit_points == 0:
             self.hit_points += -1
 
@@ -455,7 +455,7 @@ class EnemyBullet:
                 player.hit()
         except SystemExit: # player.hit() will exit if the player has 0 hp, if this happens actually go along with exiting
             import sys
-            sys.exit(1)
+            sys.exit(2)
         except:
             pass
 
