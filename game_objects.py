@@ -2,10 +2,10 @@ import pygame
 
 
 class Screen: # screen is the game window, it also handles logic and rendering for all game objects
-    SCREEN_RESOLUTION = (1280, 1024) # ideally set this to your screen resolution
-    BACKGROUND = (255, 255, 255)
 
     def __init__(self):
+        self.SCREEN_RESOLUTION = (1280, 1024) # ideally set this to your screen resolution
+        self.BACKGROUND = (255, 255, 255)
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
         pygame.mouse.set_visible(False)
 
@@ -29,13 +29,13 @@ class Camera:
         self.combined_camera_offset = [0, 0]
 
     def update_camera_position(self): # camera holds different offsets, so the game objects can be drawn at their correct locations
-        from game_loop import player, mouse
+        from game_loop import player, mouse, screen
 
         mouse_camera_offset_x = -mouse.centered_coordinates[0] * self.MOUSE_CAMERA_OFFSET_INFLUENCE # the mouse offset frames more of what the player is "aiming" at
-        combined_camera_offset_x = -player.coordinates[0] + Screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center the camera on player and add mouse offset
+        combined_camera_offset_x = -player.coordinates[0] + screen.SCREEN_RESOLUTION[0]/2 + mouse_camera_offset_x # center the camera on player and add mouse offset
 
         mouse_camera_offset_y = -mouse.centered_coordinates[1] * self.MOUSE_CAMERA_OFFSET_INFLUENCE
-        combined_camera_offset_y = -player.coordinates[1] + Screen.SCREEN_RESOLUTION[1]/2 + mouse_camera_offset_y
+        combined_camera_offset_y = -player.coordinates[1] + screen.SCREEN_RESOLUTION[1]/2 + mouse_camera_offset_y
 
         self.mouse_camera_offset = [mouse_camera_offset_x, mouse_camera_offset_y]
         self.combined_camera_offset = [combined_camera_offset_x, combined_camera_offset_y]

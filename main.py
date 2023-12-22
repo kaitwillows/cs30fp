@@ -18,10 +18,16 @@ while True:
     
     print("\nselect an option:")
     print("    [1] play game")
-    print("    [2] reset scores")
-    print("    [3] quit game")
+    print(f"    [2] set screen resolution (currently ({scores['resolution_x']} x {scores['resolution_y']})")
+    print("    [3] reset scores")
+    print("    [4] quit game")
 
-    user_input = int(input(""))
+    try:
+        user_input = int(input(""))
+    except:
+        user_input = -1
+        os.system('cls')
+        print("please enter the number that corresponds to your selection (1, 2, 3, or 4)\n")
 
     match user_input:
         case 1:
@@ -38,17 +44,33 @@ while True:
                 json.dump(scores, file)
         case 2:
             os.system('cls')
-            print("resetting scores...")
+            try:
+                scores['resolution_x'] = int(input("set your x resolution (in pixels): "))
+                scores['resolution_y'] = int(input("set your y resolution (in pixels): "))
+                with open('scores.json', 'w') as file:
+                    json.dump(scores, file)
+                os.system('cls')
+                print("set resolution successfully\n")
+            except:
+                os.system('cls')
+                print("input was not a number, please try again\n")
+        case 3:
+            os.system('cls')
 
             scores['player'] = 0
             scores['enemy'] = 0
 
             with open('scores.json', 'w') as file:
                 json.dump(scores, file)
-        case 3:
+
+            print("scores reset\n")
+        case 4:
             os.system('cls')
             print("thanks for playing")
             quit()
+        case _:
+            os.system('cls')
+            print("please enter the number that corresponds to your selection (1, 2, 3, or 4)\n")
 
 
 
