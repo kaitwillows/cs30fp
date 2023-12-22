@@ -28,7 +28,8 @@ alternatively, you can open a terminal window, and navigate it to the directory 
 # tour of the game
 
 ## menu
-![text-based menu options](./readme%20assets/menu.png)  
+![text-based menu options](./readme%20assets/menu.png)
+
 look at how charming it is! (i promise the game looks cooler than this)
 
 the menu is pretty basic, but it gives you a couple of options:
@@ -38,7 +39,8 @@ the menu is pretty basic, but it gives you a couple of options:
 - quit game - i don't know why you would ever want to leave, but the option is there reguardless
 
 ## game window
-![game window](./readme%20assets/game%20window.png)  
+![game window](./readme%20assets/game%20window.png)
+
 (maybe its not that cool, but i promise the game is slightly more fun than it looks)
 
 either way, theres a couple important things going on here:
