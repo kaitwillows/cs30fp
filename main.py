@@ -11,15 +11,15 @@ while True:
         scores = json.load(file)
 
 
-    print("cool untitled game")
-    print("==================")
+    print("welcome to untitled shoot game")
+    print("==============================")
     print(f"player wins: {scores['player']}")
     print(f"enemy wins: {scores['enemy']}")
     
     print("\nselect an option:")
     print("    [1] play game")
-    print("    [2] quit game")
-    print("    [3] reset scores")
+    print("    [2] reset scores")
+    print("    [3] quit game")
 
     user_input = int(input(""))
 
@@ -28,20 +28,15 @@ while True:
             os.system('cls')
             result = subprocess.run(['python', 'game_loop.py'], capture_output=True, text=True).returncode
             if result == 1:
-                print("player won")
-                scores['player'] += 1
-            elif result == 2:
-                print("enemy won")
+                print("enemy won :(\n")
                 scores['enemy'] += 1
+            elif result == 2:
+                print("player won!!!\n")
+                scores['player'] += 1
             
             with open('scores.json', 'w') as file:
                 json.dump(scores, file)
-            
         case 2:
-            os.system('cls')
-            print("thanks for playing")
-            quit()
-        case 3:
             os.system('cls')
             print("resetting scores...")
 
@@ -50,6 +45,10 @@ while True:
 
             with open('scores.json', 'w') as file:
                 json.dump(scores, file)
+        case 3:
+            os.system('cls')
+            print("thanks for playing")
+            quit()
 
 
 

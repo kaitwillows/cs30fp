@@ -2,11 +2,12 @@ import pygame
 
 
 class Screen: # screen is the game window, it also handles logic and rendering for all game objects
-    SCREEN_RESOLUTION = (1280, 1024)
+    SCREEN_RESOLUTION = (1280, 1024) # ideally set this to your screen resolution
     BACKGROUND = (255, 255, 255)
 
     def __init__(self):
         self.screen = pygame.display.set_mode(self.SCREEN_RESOLUTION)
+        pygame.mouse.set_visible(False)
 
     def move(self, moving_objects: list[object], walls: pygame.mask):
         for object in moving_objects:
@@ -106,7 +107,7 @@ class Mouse:
 
 class Player:
     def __init__(self, spawn_position):
-        self.hit_points = 3
+        self.hit_points = 1 # enemy gets 6 hp and player gets 1, that kind of makes the game balanced
         self.image = pygame.image.load("./assets/player/you3.png") # sprite with three hit points
         self.SIZE = (self.image.get_width(), self.image.get_height())
         self.SPEED_STRAIGHT = 300
@@ -159,6 +160,13 @@ class Player:
         draw_coordinates_y = screen.SCREEN_RESOLUTION[1]/2 + camera.mouse_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
         surface.blit(self.image, draw_coordinates)
+
+        if self.hit_points == -1:
+            import sys, time
+            time.sleep(1)
+            sys.exit(1)
+        if self.hit_points == 0: # this allows the player to be drawn once more without a sprite before the game quits
+            self.hit_points += -1
     
     def hit(self): # change the sprite when the player loses hit points
         self.hit_points -= 1
@@ -171,10 +179,7 @@ class Player:
                 self.image = pygame.image.load("./assets/player/you1.png")
             case 0:
                 self.image = pygame.image.load("./assets/player/you0.png")
-                import sys, json
-                sys.exit(1)
                 
-
 
 class Gun:
     def __init__(self):
@@ -251,6 +256,9 @@ class Bullet:
             if enemy.hitbox.get_at((enemy_test_x, enemy_test_y)):
                 self.alive = False
                 enemy.hit()
+        except SystemExit:
+            import sys
+            sys.exit(2)
         except:
             pass
 
@@ -269,8 +277,8 @@ class Bullet:
 
 class Enemy: #Enemy is almost entirely like Player, except it moves in random directions, with a lean towards the player
     def __init__(self, spawn_position):
-        self.hit_points = 3
-        self.IMAGE = pygame.image.load("./assets/enemy/badguy3.png") 
+        self.hit_points = 6 # enemy gets 6 hp and player gets 1, that kind of makes the game balanced
+        self.IMAGE = pygame.image.load("./assets/enemy/badguy6.png") 
         self.SIZE = (self.IMAGE.get_width(), self.IMAGE.get_height())
         self.SPEED_STRAIGHT = 300
         self.SPEED_DIAGONAL = 212.13
@@ -348,10 +356,22 @@ class Enemy: #Enemy is almost entirely like Player, except it moves in random di
         draw_coordinates_y = self.coordinates[1] + camera.combined_camera_offset[1]
         draw_coordinates = (draw_coordinates_x, draw_coordinates_y)
         surface.blit(self.IMAGE, draw_coordinates)
+        if self.hit_points == -1:
+            import sys, time
+            time.sleep(1)
+            sys.exit(2)
+        if self.hit_points == 0:
+            self.hit_points += -1
 
     def hit(self):
         self.hit_points -= 1
         match self.hit_points:
+            case 6:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy6.png")
+            case 5:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy5.png")
+            case 4:
+                self.IMAGE = pygame.image.load("./assets/enemy/badguy4.png")
             case 3:
                 self.IMAGE = pygame.image.load("./assets/enemy/badguy3.png")
             case 2:
@@ -360,14 +380,6 @@ class Enemy: #Enemy is almost entirely like Player, except it moves in random di
                 self.IMAGE = pygame.image.load("./assets/enemy/badguy1.png")
             case 0:
                 self.IMAGE = pygame.image.load("./assets/enemy/badguy0.png")
-                import sys, json
-                print("you win!!!")
-                with open('scores.json', 'r') as file:
-                    scores = json.load(file)
-                scores['player'] += 1
-                with open('data.json', 'w') as file:
-                    json.dump(scores, file)
-                sys.exit(2)
 
 
 class EnemyGun:
@@ -437,11 +449,11 @@ class EnemyBullet:
         
         player_test_x = self.coordinates[0] - player.coordinates[0]
         player_test_y = self.coordinates[1] - player.coordinates[1]
-        try:
-            if player.hitbox.get_at((player_test_x, player_test_y)):
+        try: 
+            if player.hitbox.get_at((player_test_x, player_test_y)): # get_at() will throw an error if the coordinates are outside of the hitbox
                 self.alive = False
                 player.hit()
-        except SystemExit:
+        except SystemExit: # player.hit() will exit if the player has 0 hp, if this happens actually go along with exiting
             import sys
             sys.exit(1)
         except:
