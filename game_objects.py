@@ -179,7 +179,7 @@ class Player:
                 self.image = pygame.image.load("./assets/player/you1.png")
             case 0:
                 self.image = pygame.image.load("./assets/player/you0.png")
-                
+
 
 class Gun:
     def __init__(self):
