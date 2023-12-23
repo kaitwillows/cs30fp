@@ -3,13 +3,19 @@
 
 i made this as a final project for grade 12 computer science. currently, it allows you to play a 1v1 match against an ai opponent. your only goal is to kill it before it kills you.
 
+it's similar to enter the gungeon, as when you move the mouse, your screen pans to frame more of what you're aiming at, like so,
+
+[gameplay gif](./readme%20assets/gameplay.gif)
+
 go to [setup](#setup) to setup the game and play, or go to [tour of the game](#tour-of-the-game) to learn more about it
 
 # setup
 to play this game, you'll need to download the source code, install python and install pygame.
 
 ## download the game
-in [this repository](https://github.com/kaitwillows/cs30fp), click on the green `<> Code` button at the top, then click `Download ZIP` to download the source code. extract the zip file to somewhere on your computer.
+you can download the release version from the [releases](https://github.com/kaitwillows/cs30fp/releases) page in this repository. be sure to download the `untitled-shoot-game` zip file and extract it
+
+alternatively, download the source code from [this repository](https://github.com/kaitwillows/cs30fp), click on the green `<> Code` button at the top, then click `Download ZIP` to download the source code. extract the zip file to somewhere on your computer.
 
 ## install python
 if you haven't allready, you're going to need to download the python programming language from [python.org](https://www.python.org/downloads/). navigate to the download section and install the latest version
@@ -17,10 +23,8 @@ if you haven't allready, you're going to need to download the python programming
 ## install pygame
 if you have python, you can install pygame by running `pip install pygame` in a terminal window. 
 
-you can also double click the `install pygame.bat` to do this for you.
-
 ## run the game
-you can run the game by double clicking the `run.bat` file.
+you can run the game by double clicking the `run.bat` file. (this works on windows and it *should* also work on macos)
 
 alternatively, you can open a terminal window, and navigate it to the directory where the source code is stored, then enter `python main.py` to run the game
 
