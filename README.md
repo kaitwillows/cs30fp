@@ -1,13 +1,7 @@
 # untitled shooter game (prototype???)
 > an "enter the gungeon" like shooter game in pygame
 
-i made this as a final project for grade 12 computer science. currently, it allows you to play a 1v1 match against an ai opponent. your only goal is to kill it before it kills you.
-
-it's similar to enter the gungeon, as when you move the mouse, your screen pans to frame more of what you're aiming at, like so,
-
-[gameplay gif](./readme%20assets/gameplay.gif)
-
-go to [setup](#setup) to setup the game and play, or go to [tour of the game](#tour-of-the-game) to learn more about it
+go to [setup](#setup) to play the game, or go to [tour of the game](#tour-of-the-game) to learn more about it
 
 # setup
 to play this game, you'll need to download the source code, install python and install pygame.
@@ -30,6 +24,12 @@ alternatively, you can open a terminal window, and navigate it to the directory 
 
 
 # tour of the game
+
+i made this as a final project for grade 12 computer science. currently, it allows you to play a 1v1 match against an ai opponent. your only goal is to kill it before it kills you.
+
+it's only similar to enter the gungeon, as your mouse controlls your camera, like so:
+
+![gameplay gif](./readme%20assets/gameplay.gif)
 
 ## menu
 ![text-based menu options](./readme%20assets/menu.png)
