@@ -1,7 +1,8 @@
 # untitled shooter game (prototype???)
 > an "enter the gungeon" like shooter game in pygame
 
-**this project is essentially a prototype for the controls and whatnot, i am still working on the real thing.**
+- this project was a grade 12 cs final project, which is why it's very "rough around the edges" (at least i wouldn't call this a game)
+- i may eventually create a full game out of this control scheme, but certainly not using pygame again
 
 go to [setup](#setup) to play the game, or go to [tour of the game](#tour-of-the-game) to learn more about it
 
